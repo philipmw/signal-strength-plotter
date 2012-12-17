@@ -1,0 +1,1 @@
+﻿This program expects the Windows DPI to be set at 125.

@@ -1,0 +1,105 @@
+﻿<Window x:Class="SignalPlotter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:SignalPlotter.ViewModel"
+        Title="PMW's Verizon Signal Capturer" Height="370" Width="330">
+    <Window.DataContext>
+        <vm:MainWindow/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="Label" x:Key="RowKey">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style TargetType="Label" x:Key="RowValue">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="GPS">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource RowKey}">Time:</Label>
+                <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">Latitude:</Label>
+                <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">Longitude:</Label>
+                
+                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsTime}"/>
+                <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Latitude}"/>
+                <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Longitude}"/>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Verizon Signal">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource RowKey}">Network selection:</Label>
+                <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">4G LTE bars:</Label>
+                <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">3G EVDO bars:</Label>
+                <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource RowKey}">2G 1xRTT bars:</Label>
+                
+                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding NetSel}"/>
+                <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Bars4G}"/>
+                <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Bars3G}"/>
+                <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Bars2G}"/>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Grid.Row="2" Header="Ping">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource RowKey}">Ping roundtrip:</Label>
+                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding PingMs}"/>
+            </Grid>
+        </GroupBox>
+        
+        <GroupBox Grid.Row="3" Grid.Column="0" Header="Diagnostics">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource RowKey}">Unrecognized screens:</Label>
+                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding UnrecogScreens}"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>
