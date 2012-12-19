@@ -1,0 +1,55 @@
+﻿<Window x:Class="GpsService.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:GpsService.ViewModel"
+        Title="PMW's GPS service" Height="250" Width="310">
+    <Window.DataContext>
+        <vm:MainWindow/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="Label" x:Key="RowKey">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style TargetType="Label" x:Key="RowValue">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="vm:Cmds.RequestGpsUpdate" Executed="RequestGpsUpdate_Executed"/>
+    </Window.CommandBindings>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource RowKey}">GPS device:</Label>
+        <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">GPS time:</Label>
+        <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">Latitude:</Label>
+        <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource RowKey}">Longitude:</Label>
+        <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource RowKey}">Altitude:</Label>
+        <Label Grid.Row="5" Grid.Column="0" Style="{StaticResource RowKey}"># of Satellites:</Label>
+        <Label Grid.Row="6" Grid.Column="0" Style="{StaticResource RowKey}">Requests in 1 Min:</Label>
+
+        <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsDevice}"/>
+        <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsTime}"/>
+        <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsLat}"/>
+        <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsLong}"/>
+        <Label Grid.Row="4" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Altitude}"/>
+        <Label Grid.Row="5" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Satellites}"/>
+        <Label Grid.Row="6" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding ExtReqsIn1Min}"/>
+
+        <Button Grid.Row="7" Grid.ColumnSpan="2" Command="vm:Cmds.RequestGpsUpdate" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
+    </Grid>
+</Window>

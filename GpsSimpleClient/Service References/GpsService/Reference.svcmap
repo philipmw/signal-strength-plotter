@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="7e83956c-8e82-46da-a33e-8060eeef7b00" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:7789/PmwGpsService/" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="GpsServiceHost.wsdl" MetadataType="Wsdl" ID="999aaa5e-696a-4f2d-94ea-618f4d2d788d" SourceId="1" SourceUrl="http://localhost:7789/PmwGpsService/?wsdl" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="1a26d441-d831-403b-b7bd-39fbe801e6aa" SourceId="1" SourceUrl="http://localhost:7789/PmwGpsService/?disco" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="d66c3e44-cea2-4c25-ae2f-60b13a065782" SourceId="1" SourceUrl="http://localhost:7789/PmwGpsService/?xsd=xsd2" />
+    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="8370dd80-860e-4879-9ca4-c083a5666035" SourceId="1" SourceUrl="http://localhost:7789/PmwGpsService/?xsd=xsd3" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="744057b8-f855-4b26-9cd6-8d9251cd2e8b" SourceId="1" SourceUrl="http://localhost:7789/PmwGpsService/?xsd=xsd0" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="aa9b0673-9900-487a-aa63-4cad89d9af84" SourceId="1" SourceUrl="http://localhost:7789/PmwGpsService/?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

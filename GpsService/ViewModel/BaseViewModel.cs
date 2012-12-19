@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SignalPlotter.ViewModel
+namespace GpsService.ViewModel
 {
     class BaseViewModel : INotifyPropertyChanged
     {
