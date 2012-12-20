@@ -75,8 +75,8 @@ namespace GpsService.ViewModel
             }
         }
 
-        ulong extReqsIn1Min;
-        public ulong ExtReqsIn1Min
+        int extReqsIn1Min;
+        public int ExtReqsIn1Min
         {
             get { return extReqsIn1Min; }
             private set

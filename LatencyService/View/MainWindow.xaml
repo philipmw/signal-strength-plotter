@@ -1,0 +1,80 @@
+﻿<Window x:Class="LatencyService.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:LatencyService.ViewModel"
+        Title="PMW's Latency Service" Height="200" Width="525">
+    <Window.DataContext>
+        <vm:MainWindow/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="ColumnHeading" TargetType="Label">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style TargetType="Label" x:Key="RowKey">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style TargetType="Label" x:Key="RowValue">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource RowKey}">Latency EMA:</Label>
+            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">Ext reqs in 1 min:</Label>
+            <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">Ping period:</Label>
+            
+            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding EMA}"/>
+            <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding ExtReqs}"/>
+            <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding PingPeriod}"/>
+        </Grid>
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource ColumnHeading}">Host to ping</Label>
+            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource ColumnHeading}">T-0</Label>
+            <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ColumnHeading}">T-1</Label>
+            <Label Grid.Row="0" Grid.Column="3" Style="{StaticResource ColumnHeading}">T-2</Label>
+            <Label Grid.Row="0" Grid.Column="4" Style="{StaticResource ColumnHeading}">T-3</Label>
+            <Label Grid.Row="0" Grid.Column="5" Style="{StaticResource ColumnHeading}">T-4</Label>
+
+            <Label Grid.Row="1" Grid.Column="0" Content="{Binding Host1name}"/>
+            <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Host1t0}"/>
+            <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource RowValue}" Content="{Binding Host1t1}"/>
+            <Label Grid.Row="1" Grid.Column="3" Style="{StaticResource RowValue}" Content="{Binding Host1t2}"/>
+            <Label Grid.Row="1" Grid.Column="4" Style="{StaticResource RowValue}" Content="{Binding Host1t3}"/>
+            <Label Grid.Row="1" Grid.Column="5" Style="{StaticResource RowValue}" Content="{Binding Host1t4}"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Content="{Binding Host2name}"/>
+            <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Host2t0}"/>
+            <Label Grid.Row="2" Grid.Column="2" Style="{StaticResource RowValue}" Content="{Binding Host2t1}"/>
+            <Label Grid.Row="2" Grid.Column="3" Style="{StaticResource RowValue}" Content="{Binding Host2t2}"/>
+            <Label Grid.Row="2" Grid.Column="4" Style="{StaticResource RowValue}" Content="{Binding Host2t3}"/>
+            <Label Grid.Row="2" Grid.Column="5" Style="{StaticResource RowValue}" Content="{Binding Host2t4}"/>
+
+        </Grid>
+    </DockPanel>
+</Window>

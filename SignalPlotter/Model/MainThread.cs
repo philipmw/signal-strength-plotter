@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,6 +13,13 @@ using SignalPlotter.Model.VerizonAppGateway;
 
 namespace SignalPlotter.Model
 {
+    public struct Sample
+    {
+        public Screenshot.SignalStrength? ss;
+        public PmwGpsService.LatestGpsData gps;
+        public PmwLatencyService.LatestData latency;
+    }
+
     class MainThread : IDisposable
     {
         static MainThread inst;
@@ -30,25 +38,16 @@ namespace SignalPlotter.Model
         static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
 
         bool disposed = false;
-        bool screensaverStopped = false;
-        LatencyAnalyzer latencyAnalyzer;
 
         MainThread()
         {
-            latencyAnalyzer = new LatencyAnalyzer();
-        }
-
-        void resumeScreensaver()
-        {
-            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
-            screensaverStopped = false;
         }
 
         public void Dispose()
         {
             if (!disposed)
             {
-                resumeScreensaver();
+                Stop(this, new CancelEventArgs());
                 disposed = true;
             }
         }
@@ -69,57 +68,97 @@ namespace SignalPlotter.Model
             }
         }
 
+        IntPtr vzWindow;
+        IntPtr signalHandle;
+        Screenshot vzSignalScreenshotter;
+
+        PmwGpsService.GpsServiceContractClient gpsClient;
+        PmwLatencyService.LatencyServiceContractClient latencyClient;
+
         Thread t;
-        public void start(object sender, RoutedEventArgs e)
+        public void Start(object sender, RoutedEventArgs e)
         {
-            t = new Thread(run);
+            try
+            {
+                vzWindow = FindProcess.getVZWindow();
+            }
+            catch (ProcessException ex)
+            {
+                MessageBox.Show("Cannot start: " + ex.Message);
+                Application.Current.Shutdown(1);
+            }
+            signalHandle = WindowSectionFinder.FindSignalSection(vzWindow);
+            vzSignalScreenshotter = new Screenshot(signalHandle);
+
+            t = new Thread(ThreadRun);
             SetThreadExecutionState(EXECUTION_STATE.ES_DISPLAY_REQUIRED |
                 EXECUTION_STATE.ES_SYSTEM_REQUIRED |
                 EXECUTION_STATE.ES_CONTINUOUS);
-            screensaverStopped = true;
             t.Start();
         }
 
-        public void stop(object sender, CancelEventArgs e)
+        public void Stop(object sender, CancelEventArgs e)
         {
-            resumeScreensaver();
-            t.Abort();
-            t.Join();
+            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS); // resume screensaver
+            if (t != null)
+            {
+                t.Abort();
+                t.Join();
+            }
         }
 
-        public delegate void SignalStrengthDelegate(Screenshot.SignalStrength? ss);
-        public event SignalStrengthDelegate SignalStrengthAvailable;
+        public event EventHandler<Sample> SampleAvailable;
 
-        public delegate void GpsInfoDelegate(string timestamp);
-        public event GpsInfoDelegate GpsInfoAvailable;
-
-        public delegate void LatencyDelegate(long? latency);
-        public event LatencyDelegate LatencyAvailable;
-
-        void run()
+        Sample GetSample()
         {
-            IntPtr vzWindow = FindProcess.getVZWindow();
-            IntPtr signalHandle = WindowSectionFinder.FindSignalSection(vzWindow);
-            Screenshot vzSignalScreenshotter = new Screenshot(signalHandle);
+            Sample s;
+            s.ss = vzSignalScreenshotter.Snap();
+            try
+            {
+                if (gpsClient == null)
+                {
+                    gpsClient = new PmwGpsService.GpsServiceContractClient();
+                }
+                s.gps = gpsClient.GetLatest();
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(DateTime.Now + ": Unable to communicate with GPS Service!  Not logging any data until this is fixed!");
+                gpsClient = null;
+                throw;
+            }
+
+            try
+            {
+                if (latencyClient == null)
+                {
+                    latencyClient = new PmwLatencyService.LatencyServiceContractClient();
+                }
+                s.latency = latencyClient.LatestLatency();
+            }
+            catch (CommunicationException)
+            {
+                MessageBox.Show(DateTime.Now + ": Unable to communicate with Latency Service!  Not logging any data until this is fixed!");
+                latencyClient = null;
+                throw;
+            }
+            return s;
+        }
+
+        void ThreadRun()
+        {
             while (true)
             {
-                Screenshot.SignalStrength? ss = vzSignalScreenshotter.Snap();
-                if (SignalStrengthAvailable != null)
+                try
                 {
-                    SignalStrengthAvailable(ss);
+                    Sample s = GetSample();
+                    if (SampleAvailable != null)
+                        SampleAvailable(this, s);
                 }
-
-                // FIXME: read GPS here
-                if (GpsInfoAvailable != null)
+                catch (CommunicationException)
                 {
-                    GpsInfoAvailable(DateTime.Now.ToString());
+                    // We already displayed an error message and handled the situation.
                 }
-
-                if (LatencyAvailable != null)
-                {
-                    LatencyAvailable(latencyAnalyzer.FindLatency());
-                }
-
                 System.Threading.Thread.Sleep(5000);
             }
         }

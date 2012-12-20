@@ -1,6 +1,5 @@
 ﻿using DotSpatial.Positioning;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -23,19 +22,10 @@ namespace GpsService.Model
         Device dev;
         NmeaInterpreter nmea;
         Thread t;
-
-        public class RequestProcessedEventArgs : System.EventArgs
-        {
-            public readonly ulong requestsInLastMinute;
-            public RequestProcessedEventArgs(ulong r)
-            {
-                requestsInLastMinute = r;
-            }
-        }
+        object syncRoot = new object();
 
         public delegate void GpsDataUpdatedDelegate();
         public event GpsDataUpdatedDelegate GpsDataUpdated;
-        public event EventHandler<RequestProcessedEventArgs> RequestProcessed;
 
         public GpsThread()
         {
@@ -74,28 +64,40 @@ namespace GpsService.Model
 
         void SatellitesChanged(object sender, SatelliteListEventArgs e)
         {
-            Satellites = (ushort)e.Satellites.Count;
+            lock (syncRoot)
+            {
+                Satellites = (ushort)e.Satellites.Count;
+            }
             Debug.WriteLine("Satellites changed: " + Satellites);
             NotifyOfGpsDataUpdate();
         }
 
         void TimeChanged(object sender, DateTimeEventArgs e)
         {
-            GpsTime = e.DateTime;
+            lock (syncRoot)
+            {
+                GpsTime = e.DateTime;
+            }
             Debug.WriteLine("Time changed: " + GpsTime.ToString());
             NotifyOfGpsDataUpdate();
         }
 
         void PositionChanged(object sender, PositionEventArgs e)
         {
-            GpsPos = e.Position;
+            lock (syncRoot)
+            {
+                GpsPos = e.Position;
+            }
             Debug.WriteLine("Position changed: " + GpsPos.ToString());
             NotifyOfGpsDataUpdate();
         }
 
         void AltitudeChanged(object sender, DistanceEventArgs e)
         {
-            Altitude = e.Distance;
+            lock (syncRoot)
+            {
+                Altitude = e.Distance;
+            }
             Debug.WriteLine("Altitude changed: " + Altitude.ToString());
             NotifyOfGpsDataUpdate();
         }
@@ -113,7 +115,6 @@ namespace GpsService.Model
             Dispose();
         }
 
-        ConcurrentQueue<DateTime> externalRequests = new ConcurrentQueue<DateTime>();
         void ThreadRun()
         {
             try
@@ -142,29 +143,33 @@ namespace GpsService.Model
             }
         }
 
+        // == Code specific to the TimeBasedCounter ==
+
+        TimeBasedCounter tbc = new TimeBasedCounter(TimeSpan.FromMinutes(1));
+        public class RequestProcessedEventArgs : System.EventArgs
+        {
+            public readonly int requestsInLastMinute;
+            public RequestProcessedEventArgs(int r)
+            {
+                requestsInLastMinute = r;
+            }
+        }
+        public event EventHandler<RequestProcessedEventArgs> RequestProcessed;
+
         void UpdateExternalRequestCount()
         {
-            bool deletedSome = false;
-            while (externalRequests.Count > 0 && (DateTime.Now - externalRequests.First()) > TimeSpan.FromMinutes(1))
+            if (tbc.Recount() && RequestProcessed != null)
             {
-                deletedSome = true;
-                DateTime expiredStamp;
-                externalRequests.TryDequeue(out expiredStamp);
-            }
-
-            if (deletedSome && RequestProcessed != null)
-            {
-                RequestProcessed(this, new RequestProcessedEventArgs((ulong)externalRequests.Count));
+                RequestProcessed(this, new RequestProcessedEventArgs(tbc.Count()));
             }
         }
 
         public void NotifyOfExternalRequest()
         {
-            externalRequests.Enqueue(DateTime.Now);
-            Debug.WriteLine("Notifying of "+externalRequests.Count+" external requests in the last minute.");
+            tbc.Add();
             if (RequestProcessed != null)
             {
-                RequestProcessed(this, new RequestProcessedEventArgs((ulong)externalRequests.Count));
+                RequestProcessed(this, new RequestProcessedEventArgs(tbc.Count()));
             }
         }
     }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="ede739e6-fdb6-4299-8e6b-b3d7c12a902e" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:7791/PmwLatencyService/" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="PingService.wsdl" MetadataType="Wsdl" ID="3e359a02-e83e-426a-a057-3bb366025425" SourceId="1" SourceUrl="http://localhost:7791/PmwLatencyService/?wsdl" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="9928f7ce-f284-4dbb-9f97-3118e2f7dde1" SourceId="1" SourceUrl="http://localhost:7791/PmwLatencyService/?disco" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="b3c75a7e-0ded-4448-bc95-eab904c32c2d" SourceId="1" SourceUrl="http://localhost:7791/PmwLatencyService/?xsd=xsd0" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="b5e213f8-9e83-4c73-8511-9765d6207bbb" SourceId="1" SourceUrl="http://localhost:7791/PmwLatencyService/?xsd=xsd1" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="011f1768-8cc5-4601-ae17-219e2184ceb8" SourceId="1" SourceUrl="http://localhost:7791/PmwLatencyService/?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

@@ -33,10 +33,18 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>verizon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotSpatial.Positioning">
+      <HintPath>..\..\DotSpatial\DotSpatial.Positioning.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,8 +71,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\LatencyAnalyzer.cs" />
     <Compile Include="Model\MainThread.cs" />
+    <Compile Include="Service References\PmwGpsService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\PmwLatencyService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\MainWindow.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
@@ -94,20 +111,89 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Properties\DataSources\DotSpatial.Positioning.Distance.datasource" />
+    <None Include="Properties\DataSources\DotSpatial.Positioning.Position.datasource" />
+    <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Service References\PmwGpsService\GpsServiceHost.wsdl" />
+    <None Include="Service References\PmwGpsService\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PmwGpsService\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PmwGpsService\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PmwGpsService\item3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PmwGpsService\SignalPlotter.PmwGpsService.LatestGpsData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\PmwLatencyService\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PmwLatencyService\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PmwLatencyService\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PmwLatencyService\PingService.wsdl" />
+    <None Include="Service References\PmwLatencyService\SignalPlotter.PmwLatencyService.LatestData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\Gps\" />
+    <Resource Include="verizon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\PmwGpsService\" />
+    <WCFMetadataStorage Include="Service References\PmwLatencyService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PmwGpsService\item.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PmwGpsService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PmwGpsService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PmwGpsService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PmwLatencyService\item.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PmwLatencyService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PmwLatencyService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PmwLatencyService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

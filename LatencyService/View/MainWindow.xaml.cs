@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SignalPlotter
+namespace LatencyService
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,8 +23,20 @@ namespace SignalPlotter
         public MainWindow()
         {
             InitializeComponent();
-            this.Loaded += new RoutedEventHandler(Model.MainThread.Instance.Start);
-            this.Closing += new CancelEventHandler(Model.MainThread.Instance.Stop);
+            Loaded += MainWindow_Loaded;
+            Closing += MainWindow_Closing;
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel.MainWindow vmRef = (ViewModel.MainWindow)this.DataContext;
+            vmRef.Start();
+        }
+
+        void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ViewModel.MainWindow vmRef = (ViewModel.MainWindow)this.DataContext;
+            vmRef.Stop();
         }
     }
 }

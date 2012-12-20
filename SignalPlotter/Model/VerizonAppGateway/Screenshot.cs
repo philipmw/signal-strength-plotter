@@ -35,9 +35,9 @@ namespace SignalPlotter.Model.VerizonAppGateway
         }
     }
 
-    class Screenshot
+    public class Screenshot
     {
-        const String bmpPath = "c:\\users\\pmw_000\\Desktop\\VZ\\";
+        String bmpPath = System.Environment.GetEnvironmentVariable("USERPROFILE") + "\\Desktop\\VZ\\";
         const UInt16 tooltipMs = 1300; // time between cursor positioning and tooltip appearing or disappearing
 
         public class UnrecognizedException : Exception
@@ -292,12 +292,28 @@ namespace SignalPlotter.Model.VerizonAppGateway
         public SignalStrength? Snap()
         {
             SetForegroundWindow(signalHwnd);
-            Dimensions d = WindowDimensions.GetDimensions(signalHwnd);
+            Dimensions d;
+            try
+            {
+                d = WindowDimensions.GetDimensions(signalHwnd);
+            }
+            catch (WindowDimensions.DimensionsException)
+            {
+                return null;
+            }
 
             // We take a screenshot of the signal summary first.  Then we
             // activate the tooltip and take a screenshot of that too.
-            string summaryHash = SnapSummary(d);
-            string detailHash = SnapDetail(d);
+            string summaryHash, detailHash;
+            try
+            {
+                summaryHash = SnapSummary(d);
+                detailHash = SnapDetail(d);
+            }
+            catch (UnrecognizedException)
+            {
+                return null;
+            }
 
             return analyzeSignalStrength(summaryHash, detailHash);
         }
