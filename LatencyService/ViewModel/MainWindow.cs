@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LatencyService.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,10 @@ namespace LatencyService.ViewModel
 {
     class MainWindow : BaseViewModel
     {
-        Model.PingService ps = ((App)Application.Current).pingService;
+        PingService ps = ((App)Application.Current).pingService;
 
         public TimeSpan PingPeriod { get { return ps.PingPeriod; } }
-        public ushort EMA { get { return ps.LatencyEMA; } }
+        public long EMA { get { return ps.LatencyEMA; } }
         public ushort extReqs;
         public ushort ExtReqs
         {
@@ -45,32 +46,41 @@ namespace LatencyService.ViewModel
             }
         }
 
-        public string Host1t0 { get { return PingResult(0, 0); } }
-        public string Host1t1 { get { return PingResult(0, 1); } }
-        public string Host1t2 { get { return PingResult(0, 2); } }
-        public string Host1t3 { get { return PingResult(0, 3); } }
-        public string Host1t4 { get { return PingResult(0, 4); } }
+        public LatencySample Host1t0 { get { return PingResult(0, 0); } }
+        public LatencySample Host1t1 { get { return PingResult(0, 1); } }
+        public LatencySample Host1t2 { get { return PingResult(0, 2); } }
+        public LatencySample Host1t3 { get { return PingResult(0, 3); } }
+        public LatencySample Host1t4 { get { return PingResult(0, 4); } }
 
-        public string Host2t0 { get { return PingResult(1, 0); } }
-        public string Host2t1 { get { return PingResult(1, 1); } }
-        public string Host2t2 { get { return PingResult(1, 2); } }
-        public string Host2t3 { get { return PingResult(1, 3); } }
-        public string Host2t4 { get { return PingResult(1, 4); } }
+        public LatencySample Host2t0 { get { return PingResult(1, 0); } }
+        public LatencySample Host2t1 { get { return PingResult(1, 1); } }
+        public LatencySample Host2t2 { get { return PingResult(1, 2); } }
+        public LatencySample Host2t3 { get { return PingResult(1, 3); } }
+        public LatencySample Host2t4 { get { return PingResult(1, 4); } }
 
-        string PingResult(int hostIndex, int tIndex)
+        LatencySample PingResult(int hostIndex, int tIndex)
         {
+            LatencySample s;
             if (ps.Results != null && ps.Results[hostIndex].Count > tIndex)
             {
                 long? e = ps.Results[hostIndex].ElementAt(tIndex);
                 if (e.HasValue)
-                    return e.Value.ToString();
+                {
+                    s.status = SampleStatus.Good;
+                    s.rttMs = e.Value;
+                }
                 else
-                    return "###";
+                {
+                    s.status = SampleStatus.TimedOut;
+                    s.rttMs = -1;
+                }
             }
             else
             {
-                return "--";
+                s.status = SampleStatus.Nonexistent;
+                s.rttMs = -1;
             }
+            return s;
         }
 
         public MainWindow()

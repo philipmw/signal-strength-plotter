@@ -66,11 +66,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\ILatencyServiceContract.cs" />
+    <Compile Include="Model\LatencySample.cs" />
     <Compile Include="Model\LatencyServiceHost.cs" />
     <Compile Include="Model\PingService.cs" />
     <Compile Include="Model\TimeBasedCounter.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\MainWindow.cs" />
+    <Compile Include="View\LatencyConverter.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

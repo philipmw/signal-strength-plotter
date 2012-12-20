@@ -16,14 +16,14 @@ namespace LatencyService.Model
         IPAddress[] hosts = new IPAddress[]
         {
             new IPAddress(new byte[] { 4, 2, 2, 2 } ), //well-known DNS server
-            new IPAddress(new byte[] { 72, 14, 178, 210 } ), //qnan.org
+            new IPAddress(new byte[] { 8, 8, 8, 8 } ), //Google's well-known DNS server
         };
 
         public event EventHandler NewResultAvailable;
         public IPAddress[] Hosts { get { return hosts; } }
         public TimeSpan PingPeriod { get { return timeBetweenSamples; } }
         public ushort MaxNumResults { get; private set; }
-        public ushort LatencyEMA { get; private set; }
+        public long LatencyEMA { get; private set; }
 
         /// <summary>
         /// pingResults is an array of linked lists.  Each element of the array
