@@ -15,7 +15,7 @@ namespace SignalPlotter.Model
 {
     public struct Sample
     {
-        public Screenshot.SignalStrength? ss;
+        public Screenshot.SignalStrengthSample? sss;
         public PmwGpsService.LatestGpsData gps;
         public PmwLatencyService.LatestData latency;
     }
@@ -112,7 +112,7 @@ namespace SignalPlotter.Model
         Sample GetSample()
         {
             Sample s;
-            s.ss = vzSignalScreenshotter.Snap();
+            s.sss = vzSignalScreenshotter.Snap();
             try
             {
                 if (gpsClient == null)

@@ -62,6 +62,11 @@ namespace SignalPlotter.Model.VerizonAppGateway
             public UInt16 bars2g, bars3g, bars4g; // 0--4
             public NetworkChoice netChoice;
         }
+        public struct SignalStrengthSample
+        {
+            public string sumHash, detailHash;
+            public SignalStrength? ss;
+        }
 
         SignalStrength? analyzeSignalStrength(string sumHash, string detHash)
         {
@@ -241,8 +246,8 @@ namespace SignalPlotter.Model.VerizonAppGateway
             else
             {
                 Console.WriteLine("Unrecognized detail hash: " + detHash);
-                return null;
                 //throw new UnrecognizedException();
+                return null;
             }
             return ss;
         }
@@ -289,7 +294,7 @@ namespace SignalPlotter.Model.VerizonAppGateway
             return detailHash;
         }
 
-        public SignalStrength? Snap()
+        public SignalStrengthSample? Snap()
         {
             SetForegroundWindow(signalHwnd);
             Dimensions d;
@@ -302,20 +307,21 @@ namespace SignalPlotter.Model.VerizonAppGateway
                 return null;
             }
 
+            SignalStrengthSample sss;
             // We take a screenshot of the signal summary first.  Then we
             // activate the tooltip and take a screenshot of that too.
-            string summaryHash, detailHash;
             try
             {
-                summaryHash = SnapSummary(d);
-                detailHash = SnapDetail(d);
+                sss.sumHash = SnapSummary(d);
+                sss.detailHash = SnapDetail(d);
             }
             catch (UnrecognizedException)
             {
                 return null;
             }
 
-            return analyzeSignalStrength(summaryHash, detailHash);
+            sss.ss = analyzeSignalStrength(sss.sumHash, sss.detailHash);
+            return sss;
         }
 
         String hashBitmap(Bitmap bmp)

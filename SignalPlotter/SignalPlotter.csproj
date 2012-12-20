@@ -71,6 +71,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\Logger.cs" />
     <Compile Include="Model\MainThread.cs" />
     <Compile Include="Service References\PmwGpsService\Reference.cs">
       <AutoGen>True</AutoGen>

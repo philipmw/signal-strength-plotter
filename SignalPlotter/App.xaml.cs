@@ -13,5 +13,11 @@ namespace SignalPlotter
     /// </summary>
     public partial class App : Application
     {
+        Model.Logger logger = new Model.Logger();
+
+        public App()
+        {
+            Model.MainThread.Instance.SampleAvailable += logger.SampleAvailable;
+        }
     }
 }
