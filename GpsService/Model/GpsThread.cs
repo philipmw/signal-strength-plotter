@@ -30,6 +30,8 @@ namespace GpsService.Model
         public GpsThread()
         {
             Devices.DeviceDetected += DeviceDetected;
+            Devices.AllowExhaustiveSerialPortScanning = false;
+            Devices.AllowBluetoothConnections = false;
             Devices.BeginDetection();
             Devices.WaitForDetection();
             if (dev == null)
