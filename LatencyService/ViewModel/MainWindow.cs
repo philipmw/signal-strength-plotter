@@ -26,7 +26,7 @@ namespace LatencyService.ViewModel
         }
         public string Alert { get { return "---"; } }
 
-        string host1name;
+        string host1name, host2name;
         public string Host1name
         {
             get { return host1name; }
@@ -35,7 +35,6 @@ namespace LatencyService.ViewModel
                 NotifyPropertyChanged();
             }
         }
-        string host2name;
         public string Host2name
         {
             get { return host2name; }
@@ -44,6 +43,15 @@ namespace LatencyService.ViewModel
                 host2name = value;
                 NotifyPropertyChanged();
             }
+        }
+
+        public ulong Host1fastest
+        {
+            get { return ps.FastestCount[0]; }
+        }
+        public ulong Host2fastest
+        {
+            get { return ps.FastestCount[1]; }
         }
 
         public LatencySample Host1t0 { get { return PingResult(0, 0); } }
@@ -92,7 +100,7 @@ namespace LatencyService.ViewModel
             ps.NewResultAvailable += NewResultAvailable;
             ps.RequestProcessed += ExtReqsUpdated;
             Host1name = ps.Hosts[0].ToString();
-            Host2name = ps.Hosts[1].ToString(); // yes, this assumes there are at least two hosts defined.  If you crashed here, ask yourself why you don't have at least two defined.
+            Host2name = ps.Hosts[1].ToString();
             ps.Start();
         }
 
@@ -109,7 +117,10 @@ namespace LatencyService.ViewModel
         void NewResultAvailable(object sender, EventArgs e)
         {
             NotifyPropertyChanged("EMA");
-            
+
+            NotifyPropertyChanged("Host1fastest");
+            NotifyPropertyChanged("Host2fastest");
+
             NotifyPropertyChanged("Host1t0");
             NotifyPropertyChanged("Host1t1");
             NotifyPropertyChanged("Host1t2");

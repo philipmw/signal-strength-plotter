@@ -43,6 +43,7 @@
             <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding ExtReqs}"/>
             <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding PingPeriod}"/>
         </Grid>
+        
         <Grid DockPanel.Dock="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
@@ -50,7 +51,8 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -59,25 +61,28 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource ColumnHeading}">Host to ping</Label>
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource ColumnHeading}">T-0</Label>
-            <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ColumnHeading}">T-1</Label>
-            <Label Grid.Row="0" Grid.Column="3" Style="{StaticResource ColumnHeading}">T-2</Label>
-            <Label Grid.Row="0" Grid.Column="4" Style="{StaticResource ColumnHeading}">T-3</Label>
-            <Label Grid.Row="0" Grid.Column="5" Style="{StaticResource ColumnHeading}">T-4</Label>
+            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource ColumnHeading}">Fastest</Label>
+            <Label Grid.Row="0" Grid.Column="2" Style="{StaticResource ColumnHeading}">T-0</Label>
+            <Label Grid.Row="0" Grid.Column="3" Style="{StaticResource ColumnHeading}">T-1</Label>
+            <Label Grid.Row="0" Grid.Column="4" Style="{StaticResource ColumnHeading}">T-2</Label>
+            <Label Grid.Row="0" Grid.Column="5" Style="{StaticResource ColumnHeading}">T-3</Label>
+            <Label Grid.Row="0" Grid.Column="6" Style="{StaticResource ColumnHeading}">T-4</Label>
 
             <Label Grid.Row="1" Grid.Column="0" Content="{Binding Host1name}"/>
-            <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Background="{Binding Host1t0, Converter={StaticResource SampleBg}}" Content="{Binding Host1t0, Converter={StaticResource SampleValue}}"/>
-            <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource RowValue}" Background="{Binding Host1t1, Converter={StaticResource SampleBg}}" Content="{Binding Host1t1, Converter={StaticResource SampleValue}}"/>
-            <Label Grid.Row="1" Grid.Column="3" Style="{StaticResource RowValue}" Background="{Binding Host1t2, Converter={StaticResource SampleBg}}" Content="{Binding Host1t2, Converter={StaticResource SampleValue}}"/>
-            <Label Grid.Row="1" Grid.Column="4" Style="{StaticResource RowValue}" Background="{Binding Host1t3, Converter={StaticResource SampleBg}}" Content="{Binding Host1t3, Converter={StaticResource SampleValue}}"/>
-            <Label Grid.Row="1" Grid.Column="5" Style="{StaticResource RowValue}" Background="{Binding Host1t4, Converter={StaticResource SampleBg}}" Content="{Binding Host1t4, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Host1fastest}"/>
+            <Label Grid.Row="1" Grid.Column="2" Style="{StaticResource RowValue}" Background="{Binding Host1t0, Converter={StaticResource SampleBg}}" Content="{Binding Host1t0, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="1" Grid.Column="3" Style="{StaticResource RowValue}" Background="{Binding Host1t1, Converter={StaticResource SampleBg}}" Content="{Binding Host1t1, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="1" Grid.Column="4" Style="{StaticResource RowValue}" Background="{Binding Host1t2, Converter={StaticResource SampleBg}}" Content="{Binding Host1t2, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="1" Grid.Column="5" Style="{StaticResource RowValue}" Background="{Binding Host1t3, Converter={StaticResource SampleBg}}" Content="{Binding Host1t3, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="1" Grid.Column="6" Style="{StaticResource RowValue}" Background="{Binding Host1t4, Converter={StaticResource SampleBg}}" Content="{Binding Host1t4, Converter={StaticResource SampleValue}}"/>
 
             <Label Grid.Row="2" Grid.Column="0" Content="{Binding Host2name}"/>
-            <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Background="{Binding Host2t0, Converter={StaticResource SampleBg}}" Content="{Binding Host2t0, Converter={StaticResource SampleValue}}"/>
-            <Label Grid.Row="2" Grid.Column="2" Style="{StaticResource RowValue}" Background="{Binding Host2t1, Converter={StaticResource SampleBg}}" Content="{Binding Host2t1, Converter={StaticResource SampleValue}}"/>
-            <Label Grid.Row="2" Grid.Column="3" Style="{StaticResource RowValue}" Background="{Binding Host2t2, Converter={StaticResource SampleBg}}" Content="{Binding Host2t2, Converter={StaticResource SampleValue}}"/>
-            <Label Grid.Row="2" Grid.Column="4" Style="{StaticResource RowValue}" Background="{Binding Host2t3, Converter={StaticResource SampleBg}}" Content="{Binding Host2t3, Converter={StaticResource SampleValue}}"/>
-            <Label Grid.Row="2" Grid.Column="5" Style="{StaticResource RowValue}" Background="{Binding Host2t4, Converter={StaticResource SampleBg}}" Content="{Binding Host2t4, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Host2fastest}"/>
+            <Label Grid.Row="2" Grid.Column="2" Style="{StaticResource RowValue}" Background="{Binding Host2t0, Converter={StaticResource SampleBg}}" Content="{Binding Host2t0, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="2" Grid.Column="3" Style="{StaticResource RowValue}" Background="{Binding Host2t1, Converter={StaticResource SampleBg}}" Content="{Binding Host2t1, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="2" Grid.Column="4" Style="{StaticResource RowValue}" Background="{Binding Host2t2, Converter={StaticResource SampleBg}}" Content="{Binding Host2t2, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="2" Grid.Column="5" Style="{StaticResource RowValue}" Background="{Binding Host2t3, Converter={StaticResource SampleBg}}" Content="{Binding Host2t3, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="2" Grid.Column="6" Style="{StaticResource RowValue}" Background="{Binding Host2t4, Converter={StaticResource SampleBg}}" Content="{Binding Host2t4, Converter={StaticResource SampleValue}}"/>
 
         </Grid>
     </DockPanel>

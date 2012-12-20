@@ -26,13 +26,13 @@ namespace LatencyService.Model
         public long LatencyEMA { get; private set; }
 
         /// <summary>
-        /// pingResults is an array of linked lists.  Each element of the array
+        /// Results is an array of linked lists.  Each element of the array
         /// corresponds to a host in the 'hosts' array.  Each linked list stores
         /// the latency, in milliseconds, of each ping attempt.  If a ping
         /// attempt times out, the null value is stored.
         /// </summary>
-        LinkedList<long?>[] pingResults;
-        public LinkedList<long?>[] Results { get { return pingResults; } }
+        public LinkedList<long?>[] Results { get; private set; }
+        public ulong[] FastestCount { get; private set; }
 
         Thread t;
         Ping ping;
@@ -40,6 +40,12 @@ namespace LatencyService.Model
         {
             t = new Thread(ThreadRun);
             MaxNumResults = 5;
+            Results = new LinkedList<long?>[hosts.Count()];
+            FastestCount = new ulong[hosts.Count()];
+            for (ushort i = 0; i < Results.Count(); ++i)
+            {
+                Results[i] = new LinkedList<long?>();
+            }
         }
 
         public void Start()
@@ -49,11 +55,6 @@ namespace LatencyService.Model
                 throw new Exception("You're trying to re-start an already running thread.");
             }
             ping = new Ping();
-            pingResults = new LinkedList<long?>[hosts.Count()];
-            for (ushort i = 0; i < pingResults.Count(); ++i)
-            {
-                pingResults[i] = new LinkedList<long?>();
-            }
             t.Start();
         }
 
@@ -62,10 +63,11 @@ namespace LatencyService.Model
             while (true) // abort will take care of this
             {
                 long latencyMinMs = long.MaxValue;
+                ushort latencyMinIdx = 0;
                 for (ushort i = 0; i < hosts.Count(); ++i)
                 {
                     IPAddress host = hosts[i];
-                    LinkedList<long?> results = pingResults[i];
+                    LinkedList<long?> results = Results[i];
 
                     const ushort MaxWaitMs = 2000;
                     try
@@ -79,7 +81,10 @@ namespace LatencyService.Model
                         {
                             results.AddFirst(reply.RoundtripTime);
                             if (reply.RoundtripTime < latencyMinMs)
+                            {
                                 latencyMinMs = reply.RoundtripTime;
+                                latencyMinIdx = i;
+                            }
                         }
                     }
                     catch (PingException)
@@ -90,7 +95,9 @@ namespace LatencyService.Model
                     if (results.Count > MaxNumResults)
                         results.RemoveLast();
                 }
-                LatencyEMA = (ushort)Math.Round(LatencyEMA * ((MaxNumResults-1.0)/MaxNumResults) + latencyMinMs * (1.0/MaxNumResults));
+                ++FastestCount[latencyMinIdx];
+                double alpha = 2.0 / (MaxNumResults + 1); // http://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average
+                LatencyEMA = (ushort)Math.Round((LatencyEMA * alpha) + (latencyMinMs * (1-alpha)));
 
                 if (NewResultAvailable != null)
                     NewResultAvailable(this, null);

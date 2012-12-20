@@ -15,10 +15,14 @@ namespace LatencyService.View
         public static Brush TimeToColor(long t)
         {
             Brush b;
-            if (t < 80)
+            if (t < 70)
                 b = new SolidColorBrush(Color.FromArgb(255, 0, 255, 0));
-            else if (t < 200)
+            else if (t < 110)
+                b = new SolidColorBrush(Color.FromArgb(255, 170, 255, 0));
+            else if (t < 150)
                 b = new SolidColorBrush(Color.FromArgb(255, 255, 255, 0));
+            else if (t < 200)
+                b = new SolidColorBrush(Color.FromArgb(255, 255, 127, 0));
             else
                 b = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
             return b;
