@@ -50,15 +50,27 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Altitude">
+  <xs:element name="Elevation">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="AltitudeResponse">
+  <xs:element name="ElevationResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DotSpatial.Positioning" minOccurs="0" name="AltitudeResult" type="q3:Distance" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DotSpatial.Positioning" minOccurs="0" name="ElevationResult" type="q3:Distance" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Speed5Sec">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Speed5SecResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DotSpatial.Positioning" minOccurs="0" name="Speed5SecResult" type="q4:Speed" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

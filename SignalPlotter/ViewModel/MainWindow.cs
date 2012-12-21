@@ -16,7 +16,16 @@ namespace SignalPlotter.ViewModel
             public string sumHash, detHash;
         }
         HashSet<SSHashes> hashUnrecogSet = new HashSet<SSHashes>();
-        ulong hashUnrecog, hashUnavail;
+        ulong hashGood, hashUnrecog, hashUnavail;
+        public ulong HashGoodInstances
+        {
+            get { return hashGood; }
+            set
+            {
+                hashGood = value;
+                NotifyPropertyChanged();
+            }
+        }
         public ulong HashUnrecogInstances
         {
             get { return hashUnrecog; }
@@ -53,6 +62,7 @@ namespace SignalPlotter.ViewModel
                     Bars4G = ss.bars4g.ToString();
                     Bars3G = ss.bars3g.ToString();
                     Bars2G = ss.bars2g.ToString();
+                    ++HashGoodInstances;
                 }
                 else
                 {
@@ -77,8 +87,10 @@ namespace SignalPlotter.ViewModel
             NotifyPropertyChanged("Latitude");
             Longitude = s.gps.position.Longitude.ToString();
             NotifyPropertyChanged("Longitude");
-            Altitude = s.gps.position.Altitude.ToFeet().ToString();
-            NotifyPropertyChanged("Altitude");
+            Elevation = s.gps.position.Altitude.ToFeet().ToString();
+            NotifyPropertyChanged("Elevation");
+            Speed = s.gps.speed5sec.ToImperialUnitType().ToString();
+            NotifyPropertyChanged("Speed");
             Satellites = s.gps.satellites.ToString();
             NotifyPropertyChanged("Satellites");
 
@@ -104,7 +116,8 @@ namespace SignalPlotter.ViewModel
         public string GpsTime { get; private set; }
         public string Latitude { get; private set; }
         public string Longitude { get; private set; }
-        public string Altitude { get; private set; }
+        public string Elevation { get; private set; }
+        public string Speed { get; private set; }
         public string Satellites { get; private set; }
 
         string netSel;

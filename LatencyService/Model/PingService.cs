@@ -12,7 +12,7 @@ namespace LatencyService.Model
     public class PingService : ILatencyServiceContract
     {
         static object syncRoot = new object();
-        TimeSpan timeBetweenSamples = TimeSpan.FromSeconds(10);
+        TimeSpan timeBetweenSamples = TimeSpan.FromSeconds(5);
         IPAddress[] hosts = new IPAddress[]
         {
             new IPAddress(new byte[] { 4, 2, 2, 2 } ), //well-known DNS server

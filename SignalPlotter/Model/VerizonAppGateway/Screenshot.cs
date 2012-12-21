@@ -82,7 +82,8 @@ namespace SignalPlotter.Model.VerizonAppGateway
             else
             {
                 Console.WriteLine("Unrecognized summary hash: " + sumHash);
-                throw new UnrecognizedException();
+                //throw new UnrecognizedException();
+                return null;
             }
 
             // Remember: the first hash in a conditional is when I am not

@@ -54,16 +54,28 @@ namespace GpsService.ViewModel
             }
         }
 
-        string altitude;
-        public string Altitude
+        string gpsElev;
+        public string GpsElev
         {
-            get { return altitude; }
+            get { return gpsElev; }
             private set
             {
-                altitude = value;
+                gpsElev = value;
                 NotifyPropertyChanged();
             }
         }
+
+        string speed;
+        public string Speed
+        {
+            get { return speed; }
+            private set
+            {
+                speed = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         ushort satellites;
         public ushort Satellites
         {
@@ -111,7 +123,8 @@ namespace GpsService.ViewModel
             GpsDevice = t.DevName;
             GpsLong = t.GpsPos.Longitude.ToString();
             GpsLat = t.GpsPos.Latitude.ToString();
-            Altitude = t.Altitude.ToFeet().ToString();
+            GpsElev = t.Elevation.ToFeet().ToString();
+            Speed = t.Speed5sec.ToImperialUnitType().ToString();
             Satellites = t.Satellites;
             GpsTime = t.GpsTime.ToString();
         }

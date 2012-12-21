@@ -61,11 +61,17 @@
   <wsdl:message name="IGpsServiceContract_GpsPosition_OutputMessage">
     <wsdl:part name="parameters" element="tns:GpsPositionResponse" />
   </wsdl:message>
-  <wsdl:message name="IGpsServiceContract_Altitude_InputMessage">
-    <wsdl:part name="parameters" element="tns:Altitude" />
+  <wsdl:message name="IGpsServiceContract_Elevation_InputMessage">
+    <wsdl:part name="parameters" element="tns:Elevation" />
   </wsdl:message>
-  <wsdl:message name="IGpsServiceContract_Altitude_OutputMessage">
-    <wsdl:part name="parameters" element="tns:AltitudeResponse" />
+  <wsdl:message name="IGpsServiceContract_Elevation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ElevationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGpsServiceContract_Speed5Sec_InputMessage">
+    <wsdl:part name="parameters" element="tns:Speed5Sec" />
+  </wsdl:message>
+  <wsdl:message name="IGpsServiceContract_Speed5Sec_OutputMessage">
+    <wsdl:part name="parameters" element="tns:Speed5SecResponse" />
   </wsdl:message>
   <wsdl:message name="IGpsServiceContract_Satellites_InputMessage">
     <wsdl:part name="parameters" element="tns:Satellites" />
@@ -90,9 +96,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IGpsServiceContract/GpsPosition" message="tns:IGpsServiceContract_GpsPosition_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGpsServiceContract/GpsPositionResponse" message="tns:IGpsServiceContract_GpsPosition_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="Altitude">
-      <wsdl:input wsaw:Action="http://tempuri.org/IGpsServiceContract/Altitude" message="tns:IGpsServiceContract_Altitude_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IGpsServiceContract/AltitudeResponse" message="tns:IGpsServiceContract_Altitude_OutputMessage" />
+    <wsdl:operation name="Elevation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGpsServiceContract/Elevation" message="tns:IGpsServiceContract_Elevation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGpsServiceContract/ElevationResponse" message="tns:IGpsServiceContract_Elevation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Speed5Sec">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGpsServiceContract/Speed5Sec" message="tns:IGpsServiceContract_Speed5Sec_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGpsServiceContract/Speed5SecResponse" message="tns:IGpsServiceContract_Speed5Sec_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Satellites">
       <wsdl:input wsaw:Action="http://tempuri.org/IGpsServiceContract/Satellites" message="tns:IGpsServiceContract_Satellites_InputMessage" />
@@ -138,8 +148,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Altitude">
-      <soap12:operation soapAction="http://tempuri.org/IGpsServiceContract/Altitude" style="document" />
+    <wsdl:operation name="Elevation">
+      <soap12:operation soapAction="http://tempuri.org/IGpsServiceContract/Elevation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Speed5Sec">
+      <soap12:operation soapAction="http://tempuri.org/IGpsServiceContract/Speed5Sec" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -163,7 +182,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:7788/PmwGpsService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>PHILIPANDSUE\pmw_000</Upn>
+          <Upn>PMWLAP\pmw_000</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

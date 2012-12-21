@@ -20,7 +20,8 @@ namespace GpsService.Model
         {
             GpsThread t = ((App)Application.Current).gpsThread;
             LatestGpsData s;
-            s.position = new DotSpatial.Positioning.Position3D(t.Altitude, t.GpsPos);
+            s.position = new DotSpatial.Positioning.Position3D(t.Elevation, t.GpsPos);
+            s.speed5sec = t.Speed5sec;
             s.satellites = t.Satellites;
             s.time = t.GpsTime;
             t.NotifyOfExternalRequest();
@@ -41,11 +42,18 @@ namespace GpsService.Model
             return t.GpsPos;
         }
 
-        public DotSpatial.Positioning.Distance Altitude()
+        public DotSpatial.Positioning.Distance Elevation()
         {
             GpsThread t = ((App)Application.Current).gpsThread;
             t.NotifyOfExternalRequest();
-            return t.Altitude;
+            return t.Elevation;
+        }
+
+        public DotSpatial.Positioning.Speed Speed5Sec()
+        {
+            GpsThread t = ((App)Application.Current).gpsThread;
+            t.NotifyOfExternalRequest();
+            return t.Speed5sec;            
         }
 
         public ushort Satellites()

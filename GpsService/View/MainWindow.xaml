@@ -28,6 +28,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="130"/>
@@ -38,18 +39,20 @@
         <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">GPS time:</Label>
         <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">Latitude:</Label>
         <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource RowKey}">Longitude:</Label>
-        <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource RowKey}">Altitude:</Label>
-        <Label Grid.Row="5" Grid.Column="0" Style="{StaticResource RowKey}"># of Satellites:</Label>
-        <Label Grid.Row="6" Grid.Column="0" Style="{StaticResource RowKey}">Requests in 1 Min:</Label>
+        <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource RowKey}">Elevation:</Label>
+        <Label Grid.Row="5" Grid.Column="0" Style="{StaticResource RowKey}">Speed:</Label>
+        <Label Grid.Row="6" Grid.Column="0" Style="{StaticResource RowKey}"># of Satellites:</Label>
+        <Label Grid.Row="7" Grid.Column="0" Style="{StaticResource RowKey}">Requests in 1 Min:</Label>
 
         <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsDevice}"/>
         <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsTime}"/>
         <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsLat}"/>
         <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsLong}"/>
-        <Label Grid.Row="4" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Altitude}"/>
-        <Label Grid.Row="5" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Satellites}"/>
-        <Label Grid.Row="6" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding ExtReqsIn1Min}"/>
+        <Label Grid.Row="4" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsElev}"/>
+        <Label Grid.Row="5" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Speed}"/>
+        <Label Grid.Row="6" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Satellites}"/>
+        <Label Grid.Row="7" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding ExtReqsIn1Min}"/>
 
-        <Button Grid.Row="7" Grid.ColumnSpan="2" Command="vm:Cmds.RequestGpsUpdate" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
+        <Button Grid.Row="8" Grid.ColumnSpan="2" Command="vm:Cmds.RequestGpsUpdate" Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
     </Grid>
 </Window>

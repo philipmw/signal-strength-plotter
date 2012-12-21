@@ -11,6 +11,7 @@
     <xs:sequence>
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DotSpatial.Positioning" minOccurs="0" name="position" type="q1:Position3D" />
       <xs:element minOccurs="0" name="satellites" type="xs:unsignedShort" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DotSpatial.Positioning" minOccurs="0" name="speed5sec" type="q2:Speed" />
       <xs:element minOccurs="0" name="time" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>

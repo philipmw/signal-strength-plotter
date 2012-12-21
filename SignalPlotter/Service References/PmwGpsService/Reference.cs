@@ -29,6 +29,9 @@ namespace SignalPlotter.PmwGpsService {
         private ushort satellitesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DotSpatial.Positioning.Speed speed5secField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime timeField;
         
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -62,6 +65,19 @@ namespace SignalPlotter.PmwGpsService {
                 if ((this.satellitesField.Equals(value) != true)) {
                     this.satellitesField = value;
                     this.RaisePropertyChanged("satellites");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DotSpatial.Positioning.Speed speed5sec {
+            get {
+                return this.speed5secField;
+            }
+            set {
+                if ((this.speed5secField.Equals(value) != true)) {
+                    this.speed5secField = value;
+                    this.RaisePropertyChanged("speed5sec");
                 }
             }
         }
@@ -117,11 +133,17 @@ namespace SignalPlotter.PmwGpsService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGpsServiceContract/GpsPosition", ReplyAction="http://tempuri.org/IGpsServiceContract/GpsPositionResponse")]
         System.Threading.Tasks.Task<DotSpatial.Positioning.Position> GpsPositionAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGpsServiceContract/Altitude", ReplyAction="http://tempuri.org/IGpsServiceContract/AltitudeResponse")]
-        DotSpatial.Positioning.Distance Altitude();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGpsServiceContract/Elevation", ReplyAction="http://tempuri.org/IGpsServiceContract/ElevationResponse")]
+        DotSpatial.Positioning.Distance Elevation();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGpsServiceContract/Altitude", ReplyAction="http://tempuri.org/IGpsServiceContract/AltitudeResponse")]
-        System.Threading.Tasks.Task<DotSpatial.Positioning.Distance> AltitudeAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGpsServiceContract/Elevation", ReplyAction="http://tempuri.org/IGpsServiceContract/ElevationResponse")]
+        System.Threading.Tasks.Task<DotSpatial.Positioning.Distance> ElevationAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGpsServiceContract/Speed5Sec", ReplyAction="http://tempuri.org/IGpsServiceContract/Speed5SecResponse")]
+        DotSpatial.Positioning.Speed Speed5Sec();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGpsServiceContract/Speed5Sec", ReplyAction="http://tempuri.org/IGpsServiceContract/Speed5SecResponse")]
+        System.Threading.Tasks.Task<DotSpatial.Positioning.Speed> Speed5SecAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGpsServiceContract/Satellites", ReplyAction="http://tempuri.org/IGpsServiceContract/SatellitesResponse")]
         ushort Satellites();
@@ -189,12 +211,20 @@ namespace SignalPlotter.PmwGpsService {
             return base.Channel.GpsPositionAsync();
         }
         
-        public DotSpatial.Positioning.Distance Altitude() {
-            return base.Channel.Altitude();
+        public DotSpatial.Positioning.Distance Elevation() {
+            return base.Channel.Elevation();
         }
         
-        public System.Threading.Tasks.Task<DotSpatial.Positioning.Distance> AltitudeAsync() {
-            return base.Channel.AltitudeAsync();
+        public System.Threading.Tasks.Task<DotSpatial.Positioning.Distance> ElevationAsync() {
+            return base.Channel.ElevationAsync();
+        }
+        
+        public DotSpatial.Positioning.Speed Speed5Sec() {
+            return base.Channel.Speed5Sec();
+        }
+        
+        public System.Threading.Tasks.Task<DotSpatial.Positioning.Speed> Speed5SecAsync() {
+            return base.Channel.Speed5SecAsync();
         }
         
         public ushort Satellites() {

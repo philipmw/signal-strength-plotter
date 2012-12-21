@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:SignalPlotter.ViewModel"
-        Title="PMW's Verizon Signal Capturer" Height="520" Width="330">
+        Title="PMW's Verizon Signal Capturer" Height="370" Width="600">
     <Window.DataContext>
         <vm:MainWindow/>
     </Window.DataContext>
@@ -17,17 +17,17 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="GPS">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -42,18 +42,20 @@
                 <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource RowKey}">Time:</Label>
                 <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">Latitude:</Label>
                 <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">Longitude:</Label>
-                <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource RowKey}">Altitude:</Label>
-                <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource RowKey}">Satellites:</Label>
+                <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource RowKey}">Elevation:</Label>
+                <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource RowKey}">Speed:</Label>
+                <Label Grid.Row="5" Grid.Column="0" Style="{StaticResource RowKey}">Satellites:</Label>
                 
                 <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding GpsTime}"/>
                 <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Latitude}"/>
                 <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Longitude}"/>
-                <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Altitude}"/>
-                <Label Grid.Row="4" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Satellites}"/>
+                <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Elevation}"/>
+                <Label Grid.Row="4" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Speed}"/>
+                <Label Grid.Row="5" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Satellites}"/>
             </Grid>
         </GroupBox>
         
-        <GroupBox Grid.Row="1" Grid.Column="0" Header="Verizon Signal">
+        <GroupBox Grid.Row="0" Grid.Column="1" Header="Verizon Signal">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -78,7 +80,7 @@
             </Grid>
         </GroupBox>
         
-        <GroupBox Grid.Row="2" Header="Ping">
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Ping">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -100,9 +102,10 @@
             </Grid>
         </GroupBox>
         
-        <GroupBox Grid.Row="3" Grid.Column="0" Header="Diagnostics">
+        <GroupBox Grid.Row="1" Grid.Column="1" Header="Screenshot Diagnostics">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -112,13 +115,15 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource RowKey}">Inst unavail hashes:</Label>
-                <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">Inst unrecog hashes:</Label>
-                <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">Uniq unrecog hashes:</Label>
+                <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource RowKey}">Good hashes:</Label>
+                <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">Inst unavail hashes:</Label>
+                <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">Inst unrecog hashes:</Label>
+                <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource RowKey}">Uniq unrecog hashes:</Label>
 
-                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashUnavailInstances}"/>
-                <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashUnrecogInstances}"/>
-                <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashUnrecogUnique}"/>
+                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashGoodInstances}"/>
+                <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashUnavailInstances}"/>
+                <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashUnrecogInstances}"/>
+                <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashUnrecogUnique}"/>
             </Grid>
         </GroupBox>
     </Grid>

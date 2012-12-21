@@ -13,6 +13,7 @@ namespace GpsService.Model
         public DateTime time;
         public Position3D position;
         public ushort satellites;
+        public Speed speed5sec;
     }
 
     [ServiceContract]
@@ -31,7 +32,10 @@ namespace GpsService.Model
         Position GpsPosition();
 
         [OperationContract]
-        Distance Altitude();
+        Distance Elevation();
+
+        [OperationContract]
+        Speed Speed5Sec();
 
         [OperationContract]
         ushort Satellites();
