@@ -24,9 +24,9 @@ namespace SignalPlotter.Model
 
             sb.Append(s.gps.time.ToString("s") + ",");
             sb.Append(s.gps.satellites + ",");
-            sb.Append(s.gps.position.Latitude.DecimalDegrees.ToString("F9") + ",");
-            sb.Append(s.gps.position.Longitude.DecimalDegrees.ToString("F9") + ",");
-            sb.Append(s.gps.position.Altitude.ToMeters().Value.ToString("F2") + ",");
+            sb.Append(s.gps.position.Latitude.DecimalDegrees.ToString("F8") + ",");
+            sb.Append(s.gps.position.Longitude.DecimalDegrees.ToString("F8") + ",");
+            sb.Append(s.gps.position.Altitude.ToMeters().Value.ToString("F1") + ",");
 
             if (s.sss.HasValue)
             {
