@@ -65,6 +65,10 @@ namespace SignalPlotter.ViewModel
             if (!s.HasValue)
             {
                 ++SampleNotCollectedInstances;
+
+                // Reset GUI elements.
+                PingEma = new PmwLatencyService.LatencySample { status = PmwLatencyService.SampleStatus.Nonexistent };
+                PingLatest = new PmwLatencyService.LatencySample { status = PmwLatencyService.SampleStatus.Nonexistent };
             }
             else
             {
@@ -118,9 +122,7 @@ namespace SignalPlotter.ViewModel
             NotifyPropertyChanged("Satellites");
 
             PingEma = s.latency.ema;
-            NotifyPropertyChanged("PingEma");
             PingLatest = s.latency.latest;
-            NotifyPropertyChanged("PingLatest");
         }
 
         public MainWindow()
@@ -174,8 +176,27 @@ namespace SignalPlotter.ViewModel
             }
         }
 
-        public PmwLatencyService.LatencySample PingEma { get; private set; }
-        public PmwLatencyService.LatencySample PingLatest { get; private set; }
+        PmwLatencyService.LatencySample pingEma;
+        public PmwLatencyService.LatencySample PingEma
+        {
+            get { return pingEma; }
+            private set
+            {
+                pingEma = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        PmwLatencyService.LatencySample pingLatest;
+        public PmwLatencyService.LatencySample PingLatest
+        {
+            get { return pingLatest; }
+            private set
+            {
+                pingLatest = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public UInt16 UnrecogScreens { get; private set; }
     }
