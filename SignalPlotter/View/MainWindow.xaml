@@ -60,7 +60,7 @@
             </Grid>
         </GroupBox>
         
-        <GroupBox Grid.Row="0" Grid.Column="1" Header="Verizon Signal">
+        <GroupBox Grid.Row="1" Grid.Column="1" Header="Verizon Signal">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -105,9 +105,10 @@
             </Grid>
         </GroupBox>
         
-        <GroupBox Grid.Row="1" Grid.Column="1" Header="Screenshot Diagnostics">
+        <GroupBox Grid.Row="0" Grid.Column="1" Header="Screenshot Diagnostics">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -122,11 +123,13 @@
                 <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">Inst unavail hashes:</Label>
                 <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">Inst unrecog hashes:</Label>
                 <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource RowKey}">Uniq unrecog hashes:</Label>
+                <Label Grid.Row="4" Grid.Column="0" Style="{StaticResource RowKey}">Sample not taken:</Label>
 
                 <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashGoodInstances}"/>
                 <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashUnavailInstances}"/>
                 <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashUnrecogInstances}"/>
                 <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding HashUnrecogUnique}"/>
+                <Label Grid.Row="4" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding SampleNotCollectedInstances}"/>
             </Grid>
         </GroupBox>
     </Grid>

@@ -18,7 +18,13 @@ namespace SignalPlotter.Model
             dataStream.WriteLine("Opened for appending at " + DateTime.Now);
         }
 
-        public void SampleAvailable(object sender, Model.Sample s)
+        public void SampleAvailable(object sender, Model.Sample? s)
+        {
+            if (s.HasValue)
+                ProcessSample(s.Value);
+        }
+
+        void ProcessSample(Model.Sample s)
         {
             StringBuilder sb = new StringBuilder();
 

@@ -49,7 +49,30 @@ namespace SignalPlotter.ViewModel
             get { return hashUnrecogSet.Count; }
         }
 
-        void SampleAvailable(object sender, Model.Sample s)
+        ulong sampleNotCollectedInstances;
+        public ulong SampleNotCollectedInstances
+        {
+            get { return sampleNotCollectedInstances; }
+            private set
+            {
+                sampleNotCollectedInstances = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        void SampleAvailable(object sender, Model.Sample? s)
+        {
+            if (!s.HasValue)
+            {
+                ++SampleNotCollectedInstances;
+            }
+            else
+            {
+                ProcessSample(s.Value);
+            }
+        }
+
+        void ProcessSample(Model.Sample s)
         {
             if (s.sss.HasValue)
             {

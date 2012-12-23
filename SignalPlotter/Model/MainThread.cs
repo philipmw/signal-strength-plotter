@@ -75,6 +75,8 @@ namespace SignalPlotter.Model
         PmwGpsService.GpsServiceContractClient gpsClient;
         PmwLatencyService.LatencyServiceContractClient latencyClient;
 
+        ulong samplesCollected;
+
         Thread t;
         public void Start(object sender, RoutedEventArgs e)
         {
@@ -107,12 +109,11 @@ namespace SignalPlotter.Model
             }
         }
 
-        public event EventHandler<Sample> SampleAvailable;
+        public event EventHandler<Sample?> SampleAvailable;
 
-        Sample GetSample()
+        Sample? GetSample()
         {
             Sample s;
-            s.sss = vzSignalScreenshotter.Snap();
             try
             {
                 if (gpsClient == null)
@@ -125,7 +126,15 @@ namespace SignalPlotter.Model
             {
                 MessageBox.Show(DateTime.Now + ": Unable to communicate with GPS Service!  Not logging any data until this is fixed!");
                 gpsClient = null;
-                throw;
+                return null;
+            }
+
+            // FIXME: We need to track previous position and calculate distance,
+            // rather than looking at speed.
+            if (samplesCollected > 0 && s.gps.speed5sec < DotSpatial.Positioning.Speed.FromFeetPerSecond(7))
+            {
+                Console.WriteLine("Skipping sample collection because our speed is only " + s.gps.speed5sec.ToImperialUnitType());
+                return null;
             }
 
             try
@@ -140,8 +149,12 @@ namespace SignalPlotter.Model
             {
                 MessageBox.Show(DateTime.Now + ": Unable to communicate with Latency Service!  Not logging any data until this is fixed!");
                 latencyClient = null;
-                throw;
+                return null;
             }
+
+            s.sss = vzSignalScreenshotter.Snap();
+
+            ++samplesCollected;
             return s;
         }
 
@@ -151,7 +164,7 @@ namespace SignalPlotter.Model
             {
                 try
                 {
-                    Sample s = GetSample();
+                    Sample? s = GetSample();
                     if (SampleAvailable != null)
                         SampleAvailable(this, s);
                 }
