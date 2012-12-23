@@ -13,7 +13,8 @@ namespace LatencyService.ViewModel
         PingService ps = ((App)Application.Current).pingService;
 
         public TimeSpan PingPeriod { get { return ps.PingPeriod; } }
-        public long EMA { get { return ps.LatencyEMA; } }
+        public ulong TimedoutSamples { get { return ps.TimedoutSamples; } }
+        public LatencySample EMA { get { return ps.LatencyEMA; } }
         public ushort extReqs;
         public ushort ExtReqs
         {
@@ -117,6 +118,7 @@ namespace LatencyService.ViewModel
         void NewResultAvailable(object sender, EventArgs e)
         {
             NotifyPropertyChanged("EMA");
+            NotifyPropertyChanged("TimedoutSamples");
 
             NotifyPropertyChanged("Host1fastest");
             NotifyPropertyChanged("Host2fastest");

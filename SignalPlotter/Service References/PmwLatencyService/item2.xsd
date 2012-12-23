@@ -8,10 +8,29 @@
       </xs:appinfo>
     </xs:annotation>
     <xs:sequence>
-      <xs:element minOccurs="0" name="ema" type="xs:long" />
-      <xs:element minOccurs="0" name="maxLatency" nillable="true" type="xs:long" />
-      <xs:element minOccurs="0" name="minLatency" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="ema" type="tns:LatencySample" />
+      <xs:element minOccurs="0" name="latest" type="tns:LatencySample" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LatestData" nillable="true" type="tns:LatestData" />
+  <xs:complexType name="LatencySample">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element minOccurs="0" name="rttMs" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="status" type="tns:SampleStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LatencySample" nillable="true" type="tns:LatencySample" />
+  <xs:simpleType name="SampleStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Nonexistent" />
+      <xs:enumeration value="TimedOut" />
+      <xs:enumeration value="Good" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="SampleStatus" nillable="true" type="tns:SampleStatus" />
 </xs:schema>

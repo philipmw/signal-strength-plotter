@@ -130,9 +130,11 @@ namespace GpsService.Model
                 ((s.Altitude.ToKilometers().Value + f.Altitude.ToKilometers().Value)/2);
             var latDist = f.Latitude - s.Latitude;
             var lonDist = f.Longitude - s.Longitude;
+            var eleDist = f.Altitude - s.Altitude;
             double distInDeg = Math.Sqrt(Math.Pow(latDist.DecimalDegrees, 2) + Math.Pow(lonDist.DecimalDegrees, 2));
             Debug.WriteLine("Distance in degrees: " + distInDeg);
-            return new Distance(radius * Math.Tan((distInDeg/360) * (2*Math.PI)), DistanceUnit.Kilometers);
+            Distance dist2d = new Distance(radius * Math.Tan((distInDeg/360) * (2*Math.PI)), DistanceUnit.Kilometers);
+            return dist2d + eleDist;
         }
 
         void ElevationChanged(object sender, DistanceEventArgs e)

@@ -23,13 +23,10 @@ namespace SignalPlotter.PmwLatencyService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private long emaField;
+        private SignalPlotter.PmwLatencyService.LatencySample emaField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<long> maxLatencyField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<long> minLatencyField;
+        private SignalPlotter.PmwLatencyService.LatencySample latestField;
         
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -41,7 +38,7 @@ namespace SignalPlotter.PmwLatencyService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public long ema {
+        public SignalPlotter.PmwLatencyService.LatencySample ema {
             get {
                 return this.emaField;
             }
@@ -54,27 +51,14 @@ namespace SignalPlotter.PmwLatencyService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<long> maxLatency {
+        public SignalPlotter.PmwLatencyService.LatencySample latest {
             get {
-                return this.maxLatencyField;
+                return this.latestField;
             }
             set {
-                if ((this.maxLatencyField.Equals(value) != true)) {
-                    this.maxLatencyField = value;
-                    this.RaisePropertyChanged("maxLatency");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<long> minLatency {
-            get {
-                return this.minLatencyField;
-            }
-            set {
-                if ((this.minLatencyField.Equals(value) != true)) {
-                    this.minLatencyField = value;
-                    this.RaisePropertyChanged("minLatency");
+                if ((this.latestField.Equals(value) != true)) {
+                    this.latestField = value;
+                    this.RaisePropertyChanged("latest");
                 }
             }
         }
@@ -89,6 +73,80 @@ namespace SignalPlotter.PmwLatencyService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LatencySample", Namespace="http://schemas.datacontract.org/2004/07/LatencyService.Model")]
+    [System.SerializableAttribute()]
+    public partial struct LatencySample : System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<long> rttMsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private SignalPlotter.PmwLatencyService.SampleStatus statusField;
+        
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<long> rttMs {
+            get {
+                return this.rttMsField;
+            }
+            set {
+                if ((this.rttMsField.Equals(value) != true)) {
+                    this.rttMsField = value;
+                    this.RaisePropertyChanged("rttMs");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public SignalPlotter.PmwLatencyService.SampleStatus status {
+            get {
+                return this.statusField;
+            }
+            set {
+                if ((this.statusField.Equals(value) != true)) {
+                    this.statusField = value;
+                    this.RaisePropertyChanged("status");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SampleStatus", Namespace="http://schemas.datacontract.org/2004/07/LatencyService.Model")]
+    public enum SampleStatus : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Nonexistent = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TimedOut = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Good = 2,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PmwLatencyService.ILatencyServiceContract")]
     public interface ILatencyServiceContract {
@@ -98,12 +156,6 @@ namespace SignalPlotter.PmwLatencyService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILatencyServiceContract/LatestLatency", ReplyAction="http://tempuri.org/ILatencyServiceContract/LatestLatencyResponse")]
         System.Threading.Tasks.Task<SignalPlotter.PmwLatencyService.LatestData> LatestLatencyAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILatencyServiceContract/Ema", ReplyAction="http://tempuri.org/ILatencyServiceContract/EmaResponse")]
-        long Ema();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILatencyServiceContract/Ema", ReplyAction="http://tempuri.org/ILatencyServiceContract/EmaResponse")]
-        System.Threading.Tasks.Task<long> EmaAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -139,14 +191,6 @@ namespace SignalPlotter.PmwLatencyService {
         
         public System.Threading.Tasks.Task<SignalPlotter.PmwLatencyService.LatestData> LatestLatencyAsync() {
             return base.Channel.LatestLatencyAsync();
-        }
-        
-        public long Ema() {
-            return base.Channel.Ema();
-        }
-        
-        public System.Threading.Tasks.Task<long> EmaAsync() {
-            return base.Channel.EmaAsync();
         }
     }
 }

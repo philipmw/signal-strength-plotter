@@ -42,20 +42,10 @@
   <wsdl:message name="ILatencyServiceContract_LatestLatency_OutputMessage">
     <wsdl:part name="parameters" element="tns:LatestLatencyResponse" />
   </wsdl:message>
-  <wsdl:message name="ILatencyServiceContract_Ema_InputMessage">
-    <wsdl:part name="parameters" element="tns:Ema" />
-  </wsdl:message>
-  <wsdl:message name="ILatencyServiceContract_Ema_OutputMessage">
-    <wsdl:part name="parameters" element="tns:EmaResponse" />
-  </wsdl:message>
   <wsdl:portType name="ILatencyServiceContract">
     <wsdl:operation name="LatestLatency">
       <wsdl:input wsaw:Action="http://tempuri.org/ILatencyServiceContract/LatestLatency" message="tns:ILatencyServiceContract_LatestLatency_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILatencyServiceContract/LatestLatencyResponse" message="tns:ILatencyServiceContract_LatestLatency_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="Ema">
-      <wsdl:input wsaw:Action="http://tempuri.org/ILatencyServiceContract/Ema" message="tns:ILatencyServiceContract_Ema_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/ILatencyServiceContract/EmaResponse" message="tns:ILatencyServiceContract_Ema_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_ILatencyServiceContract" type="tns:ILatencyServiceContract">
@@ -70,15 +60,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="Ema">
-      <soap12:operation soapAction="http://tempuri.org/ILatencyServiceContract/Ema" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="LatencyServiceHost">
     <wsdl:port name="NetTcpBinding_ILatencyServiceContract" binding="tns:NetTcpBinding_ILatencyServiceContract">
@@ -86,7 +67,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:7790/PmwLatencyService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>PHILIPANDSUE\pmw_000</Upn>
+          <Upn>PMWLAP\pmw_000</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

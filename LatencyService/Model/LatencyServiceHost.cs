@@ -15,12 +15,5 @@ namespace LatencyService.Model
             ps.NotifyOfExternalRequest();
             return ps.LatestLatency();
         }
-
-        public long Ema()
-        {
-            PingService ps = ((App)Application.Current).pingService;
-            ps.NotifyOfExternalRequest();
-            return ps.Ema();
-        }
     }
 }

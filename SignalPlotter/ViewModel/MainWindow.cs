@@ -94,18 +94,10 @@ namespace SignalPlotter.ViewModel
             Satellites = s.gps.satellites.ToString();
             NotifyPropertyChanged("Satellites");
 
-            PingEma = s.latency.ema.ToString();
+            PingEma = s.latency.ema;
             NotifyPropertyChanged("PingEma");
-            if (s.latency.minLatency.HasValue)
-                PingMin = s.latency.minLatency.ToString();
-            else
-                PingMin = "N/A";
-            NotifyPropertyChanged("PingMin");
-            if (s.latency.maxLatency.HasValue)
-                PingMax = s.latency.maxLatency.ToString();
-            else
-                PingMax = "N/A";
-            NotifyPropertyChanged("PingMax");
+            PingLatest = s.latency.latest;
+            NotifyPropertyChanged("PingLatest");
         }
 
         public MainWindow()
@@ -159,9 +151,8 @@ namespace SignalPlotter.ViewModel
             }
         }
 
-        public string PingEma { get; private set; }
-        public string PingMin { get; private set; }
-        public string PingMax { get; private set; }
+        public PmwLatencyService.LatencySample PingEma { get; private set; }
+        public PmwLatencyService.LatencySample PingLatest { get; private set; }
 
         public UInt16 UnrecogScreens { get; private set; }
     }

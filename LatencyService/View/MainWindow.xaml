@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:v="clr-namespace:LatencyService.View"
         xmlns:vm="clr-namespace:LatencyService.ViewModel"
-        Title="PMW's Latency Service" Height="200" Width="525">
+        Title="PMW's Latency Service" Height="230" Width="525">
     <Window.DataContext>
         <vm:MainWindow/>
     </Window.DataContext>
@@ -30,18 +30,21 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource RowKey}">Latency EMA:</Label>
-            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">Ext reqs in 1 min:</Label>
-            <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">Ping period:</Label>
+            <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">Timed-out samples:</Label>
+            <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">Ext reqs in 1 min:</Label>
+            <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource RowKey}">Ping period:</Label>
 
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Background="{Binding EMA, Converter={StaticResource LatencyBg}}" Content="{Binding EMA, StringFormat={}{0:F0}}"/>
-            <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding ExtReqs}"/>
-            <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding PingPeriod}"/>
+            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Background="{Binding EMA, Converter={StaticResource SampleBg}}" Content="{Binding EMA, Converter={StaticResource SampleValue}}"/>
+            <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding TimedoutSamples}"/>
+            <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding ExtReqs}"/>
+            <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding PingPeriod}"/>
         </Grid>
         
         <Grid DockPanel.Dock="Top">

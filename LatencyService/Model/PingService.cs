@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -23,7 +24,20 @@ namespace LatencyService.Model
         public IPAddress[] Hosts { get { return hosts; } }
         public TimeSpan PingPeriod { get { return timeBetweenSamples; } }
         public ushort MaxNumResults { get; private set; }
-        public long LatencyEMA { get; private set; }
+
+        // Exponential Moving Average
+        long ema;
+        ushort emaSamples;
+        public LatencySample LatencyEMA
+        {
+            get
+            {
+                if (emaSamples < 2)
+                    return new LatencySample { status = SampleStatus.Nonexistent };
+                else
+                    return new LatencySample { status = SampleStatus.Good, rttMs = ema };
+            }
+        }
 
         /// <summary>
         /// Results is an array of linked lists.  Each element of the array
@@ -33,6 +47,8 @@ namespace LatencyService.Model
         /// </summary>
         public LinkedList<long?>[] Results { get; private set; }
         public ulong[] FastestCount { get; private set; }
+        public ulong TimedoutSamples { get; private set; }
+        LatencySample latestMinimumSample = new LatencySample { status = SampleStatus.Nonexistent };
 
         Thread t;
         Ping ping;
@@ -63,7 +79,10 @@ namespace LatencyService.Model
             while (true) // abort will take care of this
             {
                 long latencyMinMs = long.MaxValue;
-                ushort latencyMinIdx = 0;
+                ushort? latencyMinIdx = null;
+
+                // This loop pings each known host one time, stores the result,
+                // and determines the lowest ping time.
                 for (ushort i = 0; i < hosts.Count(); ++i)
                 {
                     IPAddress host = hosts[i];
@@ -79,8 +98,9 @@ namespace LatencyService.Model
                         }
                         else
                         {
+                            // Successful ping reply
                             results.AddFirst(reply.RoundtripTime);
-                            if (reply.RoundtripTime < latencyMinMs)
+                            if (latencyMinIdx == null || reply.RoundtripTime < latencyMinMs)
                             {
                                 latencyMinMs = reply.RoundtripTime;
                                 latencyMinIdx = i;
@@ -94,10 +114,32 @@ namespace LatencyService.Model
 
                     if (results.Count > MaxNumResults)
                         results.RemoveLast();
+                } // end of for-loop pinging every host
+
+                // Now we know which host, if any, is fastest.
+
+                if (latencyMinIdx != null)
+                {
+                    ++FastestCount[latencyMinIdx.Value];
+
+                    latestMinimumSample.status = SampleStatus.Good;
+                    latestMinimumSample.rttMs = latencyMinMs;
+
+                    // Update EMA
+                    ushort numEmaSamples = Math.Min(MaxNumResults, ++emaSamples);
+                    double alpha = 2.0 / (numEmaSamples + 1); // http://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average
+                    ema = (ushort)Math.Round((latencyMinMs * alpha) + (ema * (1 - alpha)));
+                    Debug.WriteLine("EMA of "+numEmaSamples+" samples: " + ema);
                 }
-                ++FastestCount[latencyMinIdx];
-                double alpha = 2.0 / (MaxNumResults + 1); // http://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average
-                LatencyEMA = (ushort)Math.Round((LatencyEMA * alpha) + (latencyMinMs * (1-alpha)));
+                else
+                {
+                    ++TimedoutSamples;
+
+                    latestMinimumSample.status = SampleStatus.TimedOut;
+
+                    // Update EMA
+                    emaSamples = 0;
+                }
 
                 if (NewResultAvailable != null)
                     NewResultAvailable(this, null);
@@ -112,52 +154,13 @@ namespace LatencyService.Model
             t.Join();
         }
 
-        public long Ema()
-        {
-            lock (syncRoot)
-            {
-                return LatencyEMA;
-            }
-        }
-
         public LatestData LatestLatency()
         {
             LatestData d = new LatestData();
             lock (syncRoot)
             {
                 d.ema = LatencyEMA;
-
-                foreach (LinkedList<long?> hostResults in Results)
-                {
-                    foreach (var result in hostResults)
-                    {
-                        if (result.HasValue)
-                        {
-                            if (d.minLatency.HasValue)
-                            {
-                                if (result.Value < d.minLatency)
-                                    d.minLatency = result;
-                                // otherwise keep previous value
-                            }
-                            else
-                            {
-                                d.minLatency = result.Value;
-                            }
-
-                            if (d.maxLatency.HasValue)
-                            {
-                                if (result.Value > d.maxLatency)
-                                    d.maxLatency = result;
-                                // otherwise keep previous value
-                            }
-                            else
-                            {
-                                d.maxLatency = result.Value;
-                            }
-                        }
-                        // otherwise this result does not contribute.
-                    }
-                }
+                d.latest = latestMinimumSample;
             }
             return d;
         }

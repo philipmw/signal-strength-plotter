@@ -51,9 +51,8 @@ namespace SignalPlotter.Model
                 sb.Append("NO-HASH,NO-HASH,NET-UNK,4G-UNK,3G-UNK,2G-UNK,");
             }
 
-            sb.Append(s.latency.ema.ToString() + ",");
-            sb.Append(s.latency.minLatency.ToString() + ",");
-            sb.Append(s.latency.maxLatency.ToString());
+            sb.Append(LatencySampleToCSV(s.latency.latest) + ",");
+            sb.Append(LatencySampleToCSV(s.latency.ema) + ",");
 
             dataStream.WriteLine(sb);
             dataStream.FlushAsync();
@@ -62,6 +61,27 @@ namespace SignalPlotter.Model
         public void Dispose()
         {
             dataStream.Dispose();
+        }
+
+        string LatencySampleToCSV(PmwLatencyService.LatencySample ls)
+        {
+            string result;
+            switch (ls.status)
+            {
+                case PmwLatencyService.SampleStatus.Good:
+                    result = ls.rttMs.ToString();
+                    break;
+                case PmwLatencyService.SampleStatus.Nonexistent:
+                    result = "N/A";
+                    break;
+                case PmwLatencyService.SampleStatus.TimedOut:
+                    result = "TimedOut";
+                    break;
+                default:
+                    result = "Error";
+                    break;
+            }
+            return result;
         }
     }
 }

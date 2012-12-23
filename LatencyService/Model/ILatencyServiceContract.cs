@@ -9,8 +9,8 @@ namespace LatencyService.Model
 {
     public struct LatestData
     {
-        public long? minLatency, maxLatency;
-        public long ema;
+        public LatencySample latest;
+        public LatencySample ema;
     }
 
     [ServiceContract]
@@ -18,8 +18,5 @@ namespace LatencyService.Model
     {
         [OperationContract]
         LatestData LatestLatency();
-        
-        [OperationContract]
-        long Ema();
     }
 }
