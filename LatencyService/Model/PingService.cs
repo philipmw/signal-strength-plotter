@@ -144,6 +144,7 @@ namespace LatencyService.Model
                 if (NewResultAvailable != null)
                     NewResultAvailable(this, null);
 
+                UpdateExternalRequestCount();
                 Thread.Sleep(timeBetweenSamples);
             }
         }
