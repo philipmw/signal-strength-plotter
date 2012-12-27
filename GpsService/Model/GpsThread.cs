@@ -1,4 +1,5 @@
-﻿using DotSpatial.Positioning;
+﻿using Common;
+using DotSpatial.Positioning;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -117,24 +118,10 @@ namespace GpsService.Model
                 Position3D startPos = posHist.First.Value.pos;
                 Position3D endPos = posHist.Last.Value.pos;
                 double seconds = (posHist.Last.Value.ts - posHist.First.Value.ts).TotalSeconds;
-                Distance d = FindDistanceOnEarth(startPos, endPos);
+                Distance d = startPos.DistanceFromOnEarth(endPos);
                 Debug.WriteLine("Seconds elapsed="+seconds+", distance="+d.ToImperialUnitType().ToString());
                 Speed5sec = new Speed(d.Value / seconds, SpeedUnit.KilometersPerSecond);
             }
-        }
-
-        static Distance FindDistanceOnEarth(Position3D s, Position3D f)
-        {
-            const double RadiusEarthKm = 6378.1; // according to Google
-            double radius = RadiusEarthKm +
-                ((s.Altitude.ToKilometers().Value + f.Altitude.ToKilometers().Value)/2);
-            var latDist = f.Latitude - s.Latitude;
-            var lonDist = f.Longitude - s.Longitude;
-            var eleDist = f.Altitude - s.Altitude;
-            double distInDeg = Math.Sqrt(Math.Pow(latDist.DecimalDegrees, 2) + Math.Pow(lonDist.DecimalDegrees, 2));
-            Debug.WriteLine("Distance in degrees: " + distInDeg);
-            Distance dist2d = new Distance(radius * Math.Tan((distInDeg/360) * (2*Math.PI)), DistanceUnit.Kilometers);
-            return dist2d + eleDist;
         }
 
         void ElevationChanged(object sender, DistanceEventArgs e)

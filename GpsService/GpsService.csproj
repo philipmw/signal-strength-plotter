@@ -68,7 +68,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\TimeBasedCounter.cs" />
     <Compile Include="ViewModel\Cmds.cs" />
     <Compile Include="Model\GpsServiceHost.cs" />
     <Compile Include="Model\GpsThread.cs" />
@@ -111,6 +110,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="gps.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{03368171-3f35-4a27-b553-2a80bf01bfc0}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

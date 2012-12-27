@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Common;
+using DotSpatial.Positioning;
+using SignalPlotter.Model.VerizonAppGateway;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.ServiceModel;
@@ -9,15 +13,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-using SignalPlotter.Model.VerizonAppGateway;
-
 namespace SignalPlotter.Model
 {
+    public enum SignalStrengthSampleStatus { Normal, TooProximateToPrev };
     public struct Sample
     {
+        public SignalStrengthSampleStatus ssss;
         public Screenshot.SignalStrengthSample? sss;
-        public PmwGpsService.LatestGpsData gps;
-        public PmwLatencyService.LatestData latency;
+        public PmwGpsService.LatestGpsData? gps;
+        public PmwLatencyService.LatestData? latency;
     }
 
     class MainThread : IDisposable
@@ -75,7 +79,7 @@ namespace SignalPlotter.Model
         PmwGpsService.GpsServiceContractClient gpsClient;
         PmwLatencyService.LatencyServiceContractClient latencyClient;
 
-        ulong samplesCollected;
+        Position3D? prevPosition;
 
         Thread t;
         public void Start(object sender, RoutedEventArgs e)
@@ -109,11 +113,12 @@ namespace SignalPlotter.Model
             }
         }
 
-        public event EventHandler<Sample?> SampleAvailable;
+        public event EventHandler<Sample> SampleAvailable;
 
-        Sample? GetSample()
+        Distance MinDistanceBetweenSamples = new Distance(0.1, DistanceUnit.StatuteMiles);
+        Sample GetSample()
         {
-            Sample s;
+            Sample s = new Sample();
             try
             {
                 if (gpsClient == null)
@@ -124,17 +129,9 @@ namespace SignalPlotter.Model
             }
             catch (CommunicationException)
             {
-                MessageBox.Show(DateTime.Now + ": Unable to communicate with GPS Service!  Not logging any data until this is fixed!");
+                Debug.WriteLine("Unable to communicate with GPS Service!");
                 gpsClient = null;
-                return null;
-            }
-
-            // FIXME: We need to track previous position and calculate distance,
-            // rather than looking at speed.
-            if (samplesCollected > 0 && s.gps.speed5sec < DotSpatial.Positioning.Speed.FromFeetPerSecond(7))
-            {
-                Console.WriteLine("Skipping sample collection because our speed is only " + s.gps.speed5sec.ToImperialUnitType());
-                return null;
+                s.gps = null;
             }
 
             try
@@ -147,14 +144,30 @@ namespace SignalPlotter.Model
             }
             catch (CommunicationException)
             {
-                MessageBox.Show(DateTime.Now + ": Unable to communicate with Latency Service!  Not logging any data until this is fixed!");
+                Debug.WriteLine("Unable to communicate with Latency Service!");
                 latencyClient = null;
-                return null;
+                s.latency = null;
             }
 
-            s.sss = vzSignalScreenshotter.Snap();
+            // Determine if we care about the signal strength now.
+            if (s.gps.HasValue &&
+                prevPosition.HasValue &&
+                s.gps.Value.position.DistanceFromOnEarth(prevPosition.Value) < MinDistanceBetweenSamples)
+            {
+                Debug.WriteLine("Skipping sample collection because the previous sample is too proximate.");
+                s.ssss = SignalStrengthSampleStatus.TooProximateToPrev;
+                s.sss = null;
+            }
+            else
+            {
+                s.ssss = SignalStrengthSampleStatus.Normal;
+                s.sss = vzSignalScreenshotter.Snap();
+            }
 
-            ++samplesCollected;
+            if (s.gps.HasValue)
+            {
+                prevPosition = s.gps.Value.position;
+            }
             return s;
         }
 
@@ -164,15 +177,14 @@ namespace SignalPlotter.Model
             {
                 try
                 {
-                    Sample? s = GetSample();
-                    if (SampleAvailable != null)
-                        SampleAvailable(this, s);
+                    Sample s = GetSample();
+                    SampleAvailable(this, s);
                 }
                 catch (CommunicationException)
                 {
                     // We already displayed an error message and handled the situation.
                 }
-                System.Threading.Thread.Sleep(5000);
+                System.Threading.Thread.Sleep(8000);
             }
         }
     }

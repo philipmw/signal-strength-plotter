@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,21 +19,38 @@ namespace SignalPlotter.Model
             dataStream.WriteLine("Opened for appending at " + DateTime.Now);
         }
 
-        public void SampleAvailable(object sender, Model.Sample? s)
+        public void SampleAvailable(object sender, Sample s)
         {
-            if (s.HasValue)
-                ProcessSample(s.Value);
-        }
-
-        void ProcessSample(Model.Sample s)
-        {
+            if (s.ssss == SignalStrengthSampleStatus.TooProximateToPrev)
+            {
+                Debug.WriteLine("Not writing entry to log because it's too proximate to previous sample.");
+                return;
+            }
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(s.gps.time.ToString("s") + ",");
-            sb.Append(s.gps.satellites + ",");
-            sb.Append(s.gps.position.Latitude.DecimalDegrees.ToString("F8") + ",");
-            sb.Append(s.gps.position.Longitude.DecimalDegrees.ToString("F8") + ",");
-            sb.Append(s.gps.position.Altitude.ToMeters().Value.ToString("F1") + ",");
+            WriteSampleData(ref sb, s);
+
+            dataStream.WriteLine(sb);
+            dataStream.FlushAsync();
+        }
+
+
+        void WriteSampleData(ref StringBuilder sb, Sample s)
+        {
+            if (!s.gps.HasValue)
+            {
+                sb.Append("No GPS data");
+                return;
+            }
+            else
+            {
+                PmwGpsService.LatestGpsData gps = s.gps.Value;
+                sb.Append(gps.time.ToString("s") + ",");
+                sb.Append(gps.satellites + ",");
+                sb.Append(gps.position.Latitude.DecimalDegrees.ToString("F8") + ",");
+                sb.Append(gps.position.Longitude.DecimalDegrees.ToString("F8") + ",");
+                sb.Append(gps.position.Altitude.ToMeters().Value.ToString("F1") + ",");
+            }
 
             if (s.sss.HasValue)
             {
@@ -57,11 +75,16 @@ namespace SignalPlotter.Model
                 sb.Append("NO-HASH,NO-HASH,NET-UNK,4G-UNK,3G-UNK,2G-UNK,");
             }
 
-            sb.Append(LatencySampleToCSV(s.latency.latest) + ",");
-            sb.Append(LatencySampleToCSV(s.latency.ema) + ",");
-
-            dataStream.WriteLine(sb);
-            dataStream.FlushAsync();
+            if (s.latency.HasValue)
+            {
+                PmwLatencyService.LatestData lat = s.latency.Value;
+                sb.Append(LatencySampleToCSV(lat.latest) + ",");
+                sb.Append(LatencySampleToCSV(lat.ema) + ",");
+            }
+            else
+            {
+                sb.Append("NO-PING,NO-EMA,");
+            }
         }
 
         public void Dispose()

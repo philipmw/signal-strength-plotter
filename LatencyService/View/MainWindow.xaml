@@ -1,8 +1,8 @@
 ﻿<Window x:Class="LatencyService.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:v="clr-namespace:LatencyService.View"
         xmlns:vm="clr-namespace:LatencyService.ViewModel"
+        xmlns:comm="clr-namespace:Common.Latency;assembly=Common"
         Title="PMW's Latency Service" Height="230" Width="525">
     <Window.DataContext>
         <vm:MainWindow/>
@@ -19,9 +19,9 @@
         <Style TargetType="Label" x:Key="RowValue">
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
-        <v:SampleBackgroundConverter x:Key="SampleBg"/>
-        <v:SampleValueConverter x:Key="SampleValue"/>
-        <v:LatencyBackgroundConverter x:Key="LatencyBg"/>
+        <vm:SampleBackgroundConverter x:Key="SampleBg"/>
+        <vm:SampleValueConverter x:Key="SampleValue"/>
+        <comm:LatencyBackgroundConverter x:Key="LatencyBg"/>
     </Window.Resources>
 
     <DockPanel LastChildFill="True">

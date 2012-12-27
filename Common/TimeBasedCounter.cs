@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GpsService.Model
+namespace Common
 {
-    class TimeBasedCounter
+    public class TimeBasedCounter
     {
         ConcurrentQueue<DateTime> log = new ConcurrentQueue<DateTime>();
         TimeSpan tspan;

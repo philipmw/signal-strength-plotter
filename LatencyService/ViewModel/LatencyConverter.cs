@@ -1,4 +1,5 @@
-﻿using SignalPlotter.PmwLatencyService;
+﻿using Common.Latency;
+using LatencyService.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,40 +8,10 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace SignalPlotter.View
+namespace LatencyService.ViewModel
 {
-    [ValueConversion(typeof(long), typeof(Brush))]
-    class LatencyBackgroundConverter : IValueConverter
-    {
-        public static Brush TimeToColor(long t)
-        {
-            Brush b;
-            if (t < 70)
-                b = new SolidColorBrush(Color.FromArgb(255, 0, 255, 0));
-            else if (t < 110)
-                b = new SolidColorBrush(Color.FromArgb(255, 170, 255, 0));
-            else if (t < 150)
-                b = new SolidColorBrush(Color.FromArgb(255, 255, 255, 0));
-            else if (t < 200)
-                b = new SolidColorBrush(Color.FromArgb(255, 255, 127, 0));
-            else
-                b = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
-            return b;
-        }
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return TimeToColor((long)value);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     [ValueConversion(typeof(LatencySample), typeof(string))]
-    class SampleValueConverter : IValueConverter
+    public class SampleValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -71,7 +42,7 @@ namespace SignalPlotter.View
     }
 
     [ValueConversion(typeof(LatencySample), typeof(Brush))]
-    class SampleBackgroundConverter : IValueConverter
+    public class SampleBackgroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

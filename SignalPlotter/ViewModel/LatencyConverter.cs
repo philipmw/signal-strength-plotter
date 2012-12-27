@@ -1,4 +1,6 @@
-﻿using LatencyService.Model;
+﻿using Common.Latency;
+using SignalPlotter.Model;
+using SignalPlotter.PmwLatencyService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,40 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace LatencyService.View
+namespace SignalPlotter.ViewModel
 {
-    [ValueConversion(typeof(long), typeof(Brush))]
-    class LatencyBackgroundConverter : IValueConverter
-    {
-        public static Brush TimeToColor(long t)
-        {
-            Brush b;
-            if (t < 70)
-                b = new SolidColorBrush(Color.FromArgb(255, 0, 255, 0));
-            else if (t < 110)
-                b = new SolidColorBrush(Color.FromArgb(255, 170, 255, 0));
-            else if (t < 150)
-                b = new SolidColorBrush(Color.FromArgb(255, 255, 255, 0));
-            else if (t < 200)
-                b = new SolidColorBrush(Color.FromArgb(255, 255, 127, 0));
-            else
-                b = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
-            return b;
-        }
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return TimeToColor((long)value);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     [ValueConversion(typeof(LatencySample), typeof(string))]
-    class SampleValueConverter : IValueConverter
+    public class SampleValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -71,12 +43,12 @@ namespace LatencyService.View
     }
 
     [ValueConversion(typeof(LatencySample), typeof(Brush))]
-    class SampleBackgroundConverter : IValueConverter
+    public class SampleBackgroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             Brush bgBrush;
- 	        LatencySample sample = (LatencySample)value;
+            LatencySample sample = (LatencySample)value;
             switch (sample.status)
             {
                 case SampleStatus.Good:
@@ -97,7 +69,7 @@ namespace LatencyService.View
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
- 	        throw new NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
