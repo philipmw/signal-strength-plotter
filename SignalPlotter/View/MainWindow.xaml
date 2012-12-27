@@ -16,6 +16,7 @@
         </Style>
         <vm:SampleBackgroundConverter x:Key="SampleBg"/>
         <vm:SampleValueConverter x:Key="SampleValue"/>
+        <vm:ConnectedToConverter x:Key="ConnectedToBg"/>
         <comm:LatencyBackgroundConverter x:Key="LatencyBg"/>
 
     </Window.Resources>
@@ -77,8 +78,8 @@
                 <Label Grid.Row="1" Grid.Column="0" Style="{StaticResource RowKey}">4G LTE bars:</Label>
                 <Label Grid.Row="2" Grid.Column="0" Style="{StaticResource RowKey}">3G EVDO bars:</Label>
                 <Label Grid.Row="3" Grid.Column="0" Style="{StaticResource RowKey}">2G 1xRTT bars:</Label>
-                
-                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding NetSel}"/>
+
+                <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding NetSel}" Background="{Binding ConnectedTo, Converter={StaticResource ConnectedToBg}}"/>
                 <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Bars4G}"/>
                 <Label Grid.Row="2" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Bars3G}"/>
                 <Label Grid.Row="3" Grid.Column="1" Style="{StaticResource RowValue}" Content="{Binding Bars2G}"/>

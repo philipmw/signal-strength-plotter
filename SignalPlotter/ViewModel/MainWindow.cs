@@ -64,25 +64,48 @@ namespace SignalPlotter.ViewModel
 
         void SampleAvailable(object sender, Model.Sample s)
         {
+            UpdateSignalElements(s);
+            UpdateGpsElements(s.gps);
+            UpdateLatencyElements(s.latency);
+        }
+
+        void UpdateSignalElements(Model.Sample s)
+        {
             if (s.ssss == Model.SignalStrengthSampleStatus.Normal)
             {
                 Screenshot.SignalStrengthSample sss = s.sss.Value;
-                if (sss.ss.HasValue)
+                if (sss.netChoice.HasValue)
                 {
-                    Screenshot.SignalStrength ss = sss.ss.Value;
-
-                    NetSel = ss.netChoice.ToString("g");
-                    Bars4G = ss.bars4g.ToString();
-                    Bars3G = ss.bars3g.ToString();
-                    Bars2G = ss.bars2g.ToString();
-                    ++HashGoodInstances;
+                    NetSel = sss.netChoice.Value.ToString("g");
                 }
                 else
                 {
                     NetSel = "N/A";
+                }
+
+                if (sss.detail.HasValue)
+                {
+                    Screenshot.SignalDetail sd = sss.detail.Value;
+                    ConnectedTo = sd.onWWAN;
+                    Bars4G = sd.bars4g.ToString();
+                    Bars3G = sd.bars3g.ToString();
+                    Bars2G = sd.bars2g.ToString();
+                }
+                else
+                {
+                    ConnectedTo = null;
+                    NetSel = "N/A";
                     Bars4G = "N/A";
                     Bars3G = "N/A";
                     Bars2G = "N/A";
+                }
+
+                if (sss.netChoice.HasValue && sss.detail.HasValue)
+                {
+                    ++HashGoodInstances;
+                }
+                else
+                {
                     Debug.WriteLine("Screenshot was unrecognized, but hashes are: sum=" + sss.sumHash + ", det=" + sss.detailHash);
                     hashUnrecogSet.Add(new SSHashes { sumHash = sss.sumHash, detHash = sss.detailHash });
                     NotifyPropertyChanged("HashUnrecogUnique");
@@ -97,30 +120,45 @@ namespace SignalPlotter.ViewModel
             {
                 throw new Exception("Unrecognized screenshot status!");
             }
+        }
 
-            UpdateGpsElements(s);
-
-            if (s.latency.HasValue)
+        void UpdateGpsElements(PmwGpsService.LatestGpsData? dataOrNull)
+        {
+            if (dataOrNull.HasValue)
             {
-                PingEma = s.latency.Value.ema;
-                PingLatest = s.latency.Value.latest;
+                PmwGpsService.LatestGpsData gps = dataOrNull.Value;
+                GpsTime = gps.time.ToString();
+                Latitude = gps.position.Latitude.ToString();
+                Longitude = gps.position.Longitude.ToString();
+                Elevation = gps.position.Altitude.ToFeet().ToString();
+                Speed = gps.speed5sec.ToImperialUnitType().ToString();
+                Satellites = gps.satellites.ToString();
+            }
+            else
+            {
+                GpsTime = "N/A";
+                Latitude = "N/A";
+                Longitude = "N/A";
+                Elevation = "N/A";
+                Speed = "N/A";
+                Satellites = "N/A";
+            }
+        }
+
+        void UpdateLatencyElements(PmwLatencyService.LatestData? dataOrNull)
+        {
+            if (dataOrNull.HasValue)
+            {
+                PmwLatencyService.LatestData ld = dataOrNull.Value;
+                PingEma = ld.ema;
+                PingLatest = ld.latest;
             }
             else
             {
                 PingEma = new PmwLatencyService.LatencySample { status = PmwLatencyService.SampleStatus.Nonexistent };
                 PingLatest = new PmwLatencyService.LatencySample { status = PmwLatencyService.SampleStatus.Nonexistent };
             }
-        }
 
-        void UpdateGpsElements(Model.Sample s)
-        {
-            PmwGpsService.LatestGpsData gps = s.gps.Value;
-            GpsTime = gps.time.ToString();
-            Latitude = gps.position.Latitude.ToString();
-            Longitude = gps.position.Longitude.ToString();
-            Elevation = gps.position.Altitude.ToFeet().ToString();
-            Speed = gps.speed5sec.ToImperialUnitType().ToString();
-            Satellites = gps.satellites.ToString();
         }
 
         public MainWindow()
@@ -128,6 +166,7 @@ namespace SignalPlotter.ViewModel
             Model.MainThread.Instance.SampleAvailable += SampleAvailable;
         }
 
+        // *** Start of GPS-specific Properties ***
         string gpsTime, latitude, longitude, elevation, speed, satellites;
         public string GpsTime
         {
@@ -183,7 +222,9 @@ namespace SignalPlotter.ViewModel
                 NotifyPropertyChanged();
             }
         }
+        // *** End of GPS-specific Properties ***
 
+        // *** Start of Connectivity-specific Properties ***
         string netSel;
         public string NetSel
         {
@@ -223,6 +264,19 @@ namespace SignalPlotter.ViewModel
             }
         }
 
+        Screenshot.ConnectedTo? connectedTo;
+        public Screenshot.ConnectedTo? ConnectedTo
+        {
+            get { return connectedTo; }
+            private set
+            {
+                connectedTo = value;
+                NotifyPropertyChanged();
+            }
+        }
+        // *** End of Connectivity-specific Properties ***
+
+        // *** Start of Latency-specific Properties ***
         PmwLatencyService.LatencySample pingEma;
         public PmwLatencyService.LatencySample PingEma
         {
@@ -244,5 +298,6 @@ namespace SignalPlotter.ViewModel
                 NotifyPropertyChanged();
             }
         }
+        // *** End of Latency-specific Properties ***
     }
 }

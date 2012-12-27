@@ -84,6 +84,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="ViewModel\ConnectedToConverter.cs" />
     <Compile Include="ViewModel\LatencyConverter.cs" />
     <Compile Include="ViewModel\MainWindow.cs" />
     <Compile Include="View\MainWindow.xaml.cs">

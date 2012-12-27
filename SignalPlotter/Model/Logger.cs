@@ -57,22 +57,30 @@ namespace SignalPlotter.Model
                 VerizonAppGateway.Screenshot.SignalStrengthSample sss = s.sss.Value;
                 sb.Append(sss.sumHash + ",");
                 sb.Append(sss.detailHash + ",");
-                if (sss.ss.HasValue)
+                if (sss.netChoice.HasValue)
                 {
-                    VerizonAppGateway.Screenshot.SignalStrength ss = sss.ss.Value;
-                    sb.Append(ss.netChoice.ToString("g") + ",");
-                    sb.Append(ss.bars4g + ",");
-                    sb.Append(ss.bars3g + ",");
-                    sb.Append(ss.bars2g + ",");
+                    sb.Append(sss.netChoice.Value.ToString("g") + ",");
                 }
                 else
                 {
-                    sb.Append("NET-UNK,4G-UNK,3G-UNK,2G-UNK,");
+                    sb.Append("NET-UNK,");
+                }
+                if (sss.detail.HasValue)
+                {
+                    VerizonAppGateway.Screenshot.SignalDetail sd = sss.detail.Value;
+                    sb.Append(sd.bars4g + ",");
+                    sb.Append(sd.bars3g + ",");
+                    sb.Append(sd.bars2g + ",");
+                    sb.Append(sd.onWWAN + ",");
+                }
+                else
+                {
+                    sb.Append("4G-UNK,3G-UNK,2G-UNK,WWAN-UNK,");
                 }
             }
             else
             {
-                sb.Append("NO-HASH,NO-HASH,NET-UNK,4G-UNK,3G-UNK,2G-UNK,");
+                sb.Append("NO-HASH,NO-HASH,NET-UNK,4G-UNK,3G-UNK,2G-UNK,WWAN-UNK,");
             }
 
             if (s.latency.HasValue)
