@@ -115,7 +115,7 @@ namespace SignalPlotter.Model
 
         public event EventHandler<Sample> SampleAvailable;
 
-        Distance MinDistanceBetweenSamples = new Distance(0.1, DistanceUnit.StatuteMiles);
+        Distance MinDistanceBetweenSamples = new Distance(0.05, DistanceUnit.StatuteMiles);
         Sample GetSample()
         {
             Sample s = new Sample();
@@ -162,12 +162,15 @@ namespace SignalPlotter.Model
             {
                 s.ssss = SignalStrengthSampleStatus.Normal;
                 s.sss = vzSignalScreenshotter.Snap();
+                if (s.gps.HasValue && s.sss.HasValue &&
+                    s.sss.Value.netChoice != null && s.sss.Value.detail != null)
+                {
+                    // Update 'prevPosition' only if we successfully acquired
+                    // all parts of the screenshot.
+                    prevPosition = s.gps.Value.position;
+                }
             }
 
-            if (s.gps.HasValue)
-            {
-                prevPosition = s.gps.Value.position;
-            }
             return s;
         }
 
@@ -184,7 +187,14 @@ namespace SignalPlotter.Model
                 {
                     // We already displayed an error message and handled the situation.
                 }
-                System.Threading.Thread.Sleep(8000);
+
+                if (gpsClient == null)
+                {
+                    // Normally, sampling rate is moderated by the GPS distance
+                    // from the previous sample.  If the GPS is unavailable, we
+                    // hard-code a delay to keep from spinning.
+                    Thread.Sleep(10000);
+                }
             }
         }
     }

@@ -735,10 +735,7 @@ namespace SignalPlotter.Model.VerizonAppGateway
             string destFilename = bmpPath + "det " + detailHash + ".bmp";
             if (!System.IO.File.Exists(destFilename))
                 bmp.Save(destFilename, System.Drawing.Imaging.ImageFormat.Bmp);
-
-            // Let's not wait for the tooltip to disappear because we're
-            // already waiting long enough between samples.  This is redundant.
-            //System.Threading.Thread.Sleep(tooltipMs); // wait for tooltip to disappear
+            System.Threading.Thread.Sleep(tooltipMs); // wait for tooltip to disappear
 
             return detailHash;
         }
