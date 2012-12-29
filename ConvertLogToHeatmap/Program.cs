@@ -36,7 +36,6 @@ namespace ConvertLogToHeatmap
             StringBuilder sb = new StringBuilder();
             while ((line = infile.ReadLine()) != null)
             {
-                line = infile.ReadLine();
                 Debug.WriteLine(line);
                 Dictionary<string, string> d = CSVLineToDict(line.Split(','));
                 sb.Clear();
@@ -61,10 +60,6 @@ namespace ConvertLogToHeatmap
             {
                 Console.WriteLine(e.ToString());
                 Environment.Exit(1);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Unexpected exception: " + e.ToString());
             }
         }
     }
