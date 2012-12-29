@@ -16,7 +16,6 @@ namespace SignalPlotter.Model
         {
             string outputFilename = System.Environment.GetEnvironmentVariable("USERPROFILE") + "\\Desktop\\vz-output.txt";
             dataStream = File.AppendText(outputFilename);
-            dataStream.WriteLine("Opened for appending at " + DateTime.Now);
         }
 
         public void SampleAvailable(object sender, Sample s)
